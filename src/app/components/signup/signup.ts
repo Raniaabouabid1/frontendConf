@@ -108,12 +108,17 @@ export class SignupComponent implements OnInit {
 
   onRoleChange(role: string, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
+
+    const rolesGroup = this.signupForm.get('Roles');
+
     if (checked && !this.selectedRoles.includes(role)) {
       this.selectedRoles.push(role);
+      rolesGroup?.get(role)?.setValue(true);
     } else if (!checked) {
       this.selectedRoles = this.selectedRoles.filter(r => r !== role);
-      if (role === 'Author') this.signupForm.get('Expertise')?.reset();
-      if (role === 'Chairman') this.signupForm.get('IsInternal')?.reset();
+      rolesGroup?.get(role)?.setValue(false);
+      if (role === 'Author') this.signupForm.get('expertise')?.reset();
+      if (role === 'Chairman') this.signupForm.get('isInternal')?.reset();
     }
   }
 
@@ -154,12 +159,17 @@ export class SignupComponent implements OnInit {
       const allValid = requiredFields.every(field => this.signupForm.get(field)?.valid);
       const phoneValid = this.signupForm.get('PhoneNumber')?.valid;
 
-      if (allValid && phoneValid) {
-        this.step++;
+      const rolesGroup = this.signupForm.get('Roles')?.value;
+      const hasAtLeastOneRole = Object.values(rolesGroup).some(val => val === true);
 
-        if (!this.isDiplomaStepRequired()) {
-          this.step++;
-        }
+      const chairmanSelected = rolesGroup?.Chairman;
+      const isInternalValid = chairmanSelected ? this.signupForm.get('isInternal')?.value !== null : true;
+
+      const authorSelected = rolesGroup?.Author;
+      const expertiseValid = authorSelected ? this.signupForm.get('expertise')?.value.trim() !== '' : true;
+
+      if (allValid && phoneValid && hasAtLeastOneRole && isInternalValid && expertiseValid) {
+        this.step = this.isDiplomaStepRequired() ? 2 : 3;
       } else {
         this.showAlert = true;
       }
@@ -173,7 +183,17 @@ export class SignupComponent implements OnInit {
     }
   }
 
+
   submitForm(): void {
+    console.log('im inside submitForm');
+
+    if (!this.isDiplomaStepRequired()) {
+      this.signupForm.setControl('Diplomas', this.fb.array([]));
+    }
+
+    console.log('is my Form valid  ?', this.signupForm.valid);
+    console.log('Form values:', this.signupForm.value);
+
     if (this.signupForm.valid) {
       const fullPhone = '+212' + this.signupForm.get('PhoneNumber')?.value;
 
@@ -189,7 +209,7 @@ export class SignupComponent implements OnInit {
       if (this.signupForm.get('Roles.Author')?.value) roles.push('Author');
       if (this.signupForm.get('Roles.Chairman')?.value) roles.push('Chairman');
       if (this.signupForm.get('Roles.Attendee')?.value) roles.push('Attendee');
-
+      console.log("Selected roles:", roles);
       const payload: UserInterface = {
         Roles: roles,
         IsInternal: this.signupForm.get('isInternal')?.value,

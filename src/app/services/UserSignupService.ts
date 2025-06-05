@@ -26,7 +26,6 @@ export class UserSignupService {
     formData.append('Address', data.Address);
     formData.append('Password', data.Password);
 
-    // here im sending empty diplomas array if user is attendee
     if (data.Diplomas.length === 0) {
       formData.append('Diplomas', '[]');
     } else {
@@ -37,7 +36,6 @@ export class UserSignupService {
       });
     }
 
-    // Optional: Log for debug
     console.log("FormData content:");
     formData.forEach((value, key) => {
       console.log(`${key}:`, value);
