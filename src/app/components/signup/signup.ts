@@ -137,6 +137,14 @@ export class SignupComponent implements OnInit {
       this.step--;
     }
   }
+  displayStep(): number {
+    return this.isDiplomaStepRequired() ? this.step : (this.step === 3 ? 2 : this.step);
+  }
+
+  totalSteps(): number {
+    return this.isDiplomaStepRequired() ? 3 : 2;
+  }
+
 
   nextStep(): void {
     this.showAlert = false;
