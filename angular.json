@@ -5,7 +5,21 @@
   "projects": {
     "frontendConf": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "type": "component",
+          "style": "css",
+          "skipTests": true,
+          "flat": false
+        },
+        "@schematics/angular:service": {
+          "type": "service",
+          "skipTests": true
+        },
+        "@schematics/angular:interface": {
+          "type": "interface"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
