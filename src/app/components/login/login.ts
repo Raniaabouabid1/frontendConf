@@ -1,31 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  templateUrl: './login.html',
   imports: [
     ReactiveFormsModule,
     RouterLink
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrls: ['./login.css']
 })
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  showPassword: boolean = false;
 
-export class LoginComponent {
-  loginForm: FormGroup;
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
-  constructor(private fb: FormBuilder) {
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
       Email: ['', [Validators.required, Validators.email]],
-      Pwd: ['', [Validators.required, Validators.minLength(6)]]
+      Password: ['', Validators.required]
     });
   }
 
-  onSubmit() {
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+  onSubmit(): void {
     if (this.loginForm.valid) {
-      console.log('Login Data:', this.loginForm.value);
+      const credentials = this.loginForm.value;
+      console.log(credentials);
+      this.authService.login(credentials).subscribe({
+        next: (res) => console.log('Login success:', res),
+        error: (err) => console.error('Login error:', err)
+      });
     }
   }
-
 }
