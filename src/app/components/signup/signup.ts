@@ -130,6 +130,14 @@ export class SignupComponent implements OnInit {
     return this.selectedRoles.includes('Author') || this.selectedRoles.includes('Chairman');
   }
 
+  previousStep(): void {
+    if (this.step === 3 && !this.isDiplomaStepRequired()) {
+      this.step = 1;
+    } else {
+      this.step--;
+    }
+  }
+
   nextStep(): void {
     this.showAlert = false;
 

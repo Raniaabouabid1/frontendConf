@@ -31,7 +31,7 @@
       <!-- Navigations -->
       @if (step > 1 && step < 4) {
         <button
-          (click)="step = step - 1"
+          (click)="previousStep()"
           class="absolute top-5 left-5 text-indigo-600 hover:text-indigo-800 transition-transform duration-300 hover:-translate-x-1">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -52,7 +52,7 @@
       @if (step === 1){
         <form [formGroup]="signupForm" class="space-y-4">
           <h2 class="text-xl font-semibold mb-2">Create an account</h2>
-          <!-- Role Checkboxes -->
+          <!-- Role  -->
           <div class="flex gap-4 mb-4">
             <label class="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" value="Author" (change)="onRoleChange('Author', $event)" [checked]="selectedRoles.includes('Author')" class="accent-indigo-500">
