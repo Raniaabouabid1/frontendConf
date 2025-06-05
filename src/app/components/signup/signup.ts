@@ -28,7 +28,6 @@ export class SignupComponent implements OnInit {
   maxBirthdate!: string;
   selectedRoles: string[] = [];
 
-
   constructor(private fb: FormBuilder, private userSignupService: UserSignupService) {
     this.signupForm = this.fb.group({
       Roles: this.fb.group({
@@ -118,11 +117,6 @@ export class SignupComponent implements OnInit {
     }
   }
 
-
-
-
-
-
   ngOnInit(): void {
     this.signupForm.setValidators(this.passwordMatchValidator);
     const today = new Date();
@@ -148,7 +142,7 @@ export class SignupComponent implements OnInit {
         this.step++;
 
         if (!this.isDiplomaStepRequired()) {
-          this.step++; // Skip diplomas if not required
+          this.step++;
         }
       } else {
         this.showAlert = true;
@@ -200,5 +194,4 @@ export class SignupComponent implements OnInit {
       });
     }
   }
-
 }
