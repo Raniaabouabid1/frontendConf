@@ -23,10 +23,11 @@
 
       <!--  Alert -->
       @if (showAlert){
-        <div  class="flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded mb-4 animate-pulse">
-          <img class="h-5 w-5" src="/danger.png" alt="alert icon">
-          <span>Please fill in all the required fields before continuing.</span>
-        </div>
+          <app-error-div
+                  [errorMsg]="'Please fill in all the required fields before continuing.'"
+                  [src]="'/danger.png'"
+                  [color]="'red'"
+          />
       }
       <!-- Navigations -->
       @if (step > 1 && step < 4) {

@@ -1,0 +1,7 @@
+<div
+  class="flex items-center gap-2 px-4 py-2 rounded mb-4 animate-pulse"
+  [ngClass]="{'red': isRed, 'green': !isRed}"
+>
+  <img class="h-5 w-5" src="{{src}}" alt="alert icon">
+  <span>{{ errorMsg }}</span>
+</div>

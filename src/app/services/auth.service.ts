@@ -20,6 +20,7 @@ export class AuthService {
       this.apiUrl, payload
     );
 
+    console.log("Logging in...")
     loginResponseObservable.subscribe({
       next: (res : LoginResponse) => {
         console.log('Login success');

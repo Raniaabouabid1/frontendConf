@@ -13,11 +13,12 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {NgForOf} from '@angular/common';
+import {ErrorDivComponent} from '../error-div/error-div.component';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, RouterLink, NgForOf],
+  imports: [ReactiveFormsModule, FormsModule, RouterLink, NgForOf, ErrorDivComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })

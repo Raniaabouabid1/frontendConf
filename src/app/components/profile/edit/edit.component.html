@@ -1,60 +1,100 @@
 <div class="flex flex-col">
-    <form [formGroup]="editForm" class="w-full h-[70vh] overflow-auto px-16 py-5">
-        <fieldset [disabled]="isDisabled">
-            <div class="flex flex-col w-full p-3">
-                <label class="px-2 pb-2 font-mono">Description</label>
-                <textarea required formControlName="description" placeholder="Description"
-                          class="flex-1 p-2 input rounded-lg border-2 border-gray-200"></textarea>
-            </div>
-            <div class="flex gap-2 w-full p-3">
-                <div class="flex-1 flex flex-col">
-                    <label class="px-2 pb-2 font-mono">First name</label>
-                    <input type="text" required formControlName="firstName" placeholder="First name"
-                           class="p-2 input rounded-l-lg border-2 border-gray-200">
-                </div>
-                <div class="flex-1 flex flex-col">
-                    <label class=" pb-2 font-mono">Last name</label>
-                    <input type="text" required formControlName="lastName" placeholder="Last name"
-                           class="p-2 input rounded-r-lg border-2 border-gray-200">
-                </div>
-            </div>
-            <div class="flex w-full p-3 flex-col">
-                <label class="px-2 pb-2 font-mono">Email</label>
-                <input type="text" required formControlName="email" placeholder="Email"
-                       class="p-2 input rounded-lg border-2 border-gray-200">
-            </div>
-            <div class="flex w-full p-3 flex-col">
-                <label class="px-2 pb-2 font-mono">Phone number</label>
-                <input type="text" required formControlName="phoneNumber" placeholder="Phone number"
-                       class="p-2 input rounded-lg border-2 border-gray-200">
-            </div>
-            <div class="flex w-full p-3 flex-col">
-                <label class="px-2 pb-2 font-mono">Birthdate</label>
-                <input type="date" required formControlName="birthdate" placeholder="Birthdate"
-                       class="p-2 input rounded-lg border-2 border-gray-200">
-            </div>
-            <div class="flex w-full p-3 flex-col">
-                <label class="px-2 pb-2 font-mono">Address</label>
-                <textarea type="text" required formControlName="address" placeholder="Address"
-                          class="p-2 input rounded-lg border-2 border-gray-200"></textarea>
-            </div>
-            @if (isAuthor) {
-                <div class="flex w-full p-3 flex-col">
-                    <label class="px-2 pb-2 font-mono">Expertise</label>
-                    <textarea type="text" required formControlName="expertise" placeholder="Expertise"
-                              class="p-2 input rounded-lg border-2 border-gray-200"></textarea>
-                </div>
-            }
-        </fieldset>
-    </form>
-    <div class="flex justify-center">
-        <div class="flex p-5 gap-2 text-white">
-            <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800"
-                    (click)="toggleDisabled()">
-                {{ buttonLabel }}
-            </button>
-            <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800">Change password
-            </button>
+  <form [formGroup]="editForm" class="w-full h-[70vh] overflow-auto px-16 py-5">
+    @if (showAlert) {
+      <app-error-div
+        [errorMsg]="errorMsg"
+        [src]="src"
+        [color]="color"
+      />
+    }
+    <fieldset>
+      <div class="flex flex-col w-full p-3">
+        <label class="px-2 pb-2 font-mono">Description</label>
+        <textarea formControlName="description" placeholder="Description"
+                  class="flex-1 p-2 input rounded-lg border-2 border-gray-200"></textarea>
+        @if (editForm.get('description')?.invalid && editForm.get('description')?.touched) {
+          <app-input-error [errorMsg]="'Max length exceeded'"/>
+        }
+      </div>
+      <div class="flex gap-2 w-full p-3">
+        <div class="flex-1 flex flex-col">
+          <label class="px-2 pb-2 font-mono">First name</label>
+          <input type="text" required formControlName="firstName" placeholder="First name"
+                 class="p-2 input rounded-l-lg border-2 border-gray-200">
+          @if (editForm.get('firstName')?.invalid && editForm.get('firstName')?.touched) {
+            <app-input-error [errorMsg]="'Invalid first name value'"/>
+          }
         </div>
+        <div class="flex-1 flex flex-col">
+          <label class=" pb-2 font-mono">Last name</label>
+          <input type="text" required formControlName="lastName" placeholder="Last name"
+                 class="p-2 input rounded-r-lg border-2 border-gray-200">
+          @if (editForm.get('lastName')?.invalid && editForm.get('lastName')?.touched) {
+            <app-input-error [errorMsg]="'Invalid last name value'"/>
+          }
+        </div>
+      </div>
+      <div class="flex w-full p-3 flex-col">
+        <label class="px-2 pb-2 font-mono">Email</label>
+        <input type="text" required formControlName="email" placeholder="Email"
+               class="p-2 input rounded-lg border-2 border-gray-200">
+      </div>
+      <div class="flex w-full p-3 flex-col">
+        <label class="px-2 pb-2 font-mono">Phone number</label>
+        <input type="text" required formControlName="phoneNumber" placeholder="Phone number"
+               class="p-2 input rounded-lg border-2 border-gray-200">
+        @if (editForm.get('phoneNumber')?.invalid && editForm.get('phoneNumber')?.touched) {
+          <app-input-error [errorMsg]="'Valid phone number format: (+212) 6-7 XX XX XX XX'"/>
+        }
+      </div>
+      <div class="flex w-full p-3 flex-col">
+        <label class="px-2 pb-2 font-mono">Birthdate</label>
+        <input type="date" required formControlName="birthdate" placeholder="Birthdate"
+               class="p-2 input rounded-lg border-2 border-gray-200">
+        @if (editForm.get('birthdate')?.invalid && editForm.get('birthdate')?.touched) {
+          <app-input-error [errorMsg]="'You must be at least 18 years old'"/>
+        }
+      </div>
+      <div class="flex w-full p-3 flex-col">
+        <label class="px-2 pb-2 font-mono">Address</label>
+        <textarea type="text" formControlName="address" placeholder="Address"
+                  class="p-2 input rounded-lg border-2 border-gray-200"></textarea>
+        @if (editForm.get('address')?.invalid && editForm.get('address')?.touched) {
+          <app-input-error [errorMsg]="'Max length exceeded'"/>
+        }
+      </div>
+      @if (isAuthor) {
+        <div class="flex w-full p-3 flex-col">
+          <label class="px-2 pb-2 font-mono">Expertise</label>
+          <textarea type="text" required formControlName="expertise" placeholder="Expertise"
+                    class="p-2 input rounded-lg border-2 border-gray-200"></textarea>
+          @if (editForm.get('expertise')?.invalid && editForm.get('expertise')?.touched) {
+            <app-input-error [errorMsg]="'Valid input format: exp1,exp2,...'"/>
+          }
+        </div>
+      }
+    </fieldset>
+  </form>
+  <div class="flex justify-center">
+    <div class="flex p-5 gap-2 text-white">
+      <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800"
+              (click)="toggleDisabled()">
+        {{ buttonLabel }}
+      </button>
+      @if (!isDisabled) {
+        <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800"
+                (click)="onReset()">
+          Cancel changes
+        </button>
+      }
+      <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800" (click)="showEditCredentialsModel(true)">Edit credentials
+      </button>
     </div>
+  </div>
+  @if (showModal) {
+    <app-warning-modal [h3]="h3" [message]="message" (respond)="modalResponse($event)"></app-warning-modal>
+  }
+  @if (showChangeCredentialsModal) {
+    <app-edit-credentials [oldEmail]="email" (closeModalEvent)="showEditCredentialsModel($event)"/>
+  }
 </div>
