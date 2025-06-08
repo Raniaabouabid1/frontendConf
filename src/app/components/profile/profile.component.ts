@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {RouterLink, RouterOutlet} from "@angular/router";
+import {Router, RouterLink, RouterOutlet} from "@angular/router";
+import {JwtDecoderService} from '../../services/jwt-decoder.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,5 +15,23 @@ import {RouterLink, RouterOutlet} from "@angular/router";
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
+  roles: string[] | null = [];
+  isAuthor : boolean = false;
+  isChairman : boolean = false;
+  isAttendee : boolean = true;
+  isBoardDirector: boolean = false;
 
+  constructor(private router: Router, private jwtDecoder: JwtDecoderService) {
+    if (!this.jwtDecoder.extractRoles()) {
+      this.router.navigate(['/']);
+      return;
+    }
+
+    const roles = localStorage.getItem('roles');
+    if (roles) {
+      this.isAuthor = roles.includes('Author');
+      this.isChairman = roles.includes('Chairman');
+      this.isBoardDirector = roles.includes('BoardDirector');
+    }
+  }
 }

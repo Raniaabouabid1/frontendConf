@@ -1,0 +1,52 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 via-blue-200 to-blue-300">
+  <div class="bg-white rounded-3xl shadow-2xl w-[40vw] max-w-xl h-[70vh] max-h-2xl ">
+    <div class="p-1 shadow-lg w-[40vw] max-w-xl h-[9vh] max-h-2xl gap-5  rounded-t-3xl flex flex-row justify-center">
+      <div class="flex items-center ">
+        <a routerLink="/signup"><img class="w-14 h-14 rounded-full ml-10 border-2" src="logo.png"
+                                     alt="UPFCON Logo"/></a>
+      </div>
+      <div class="h-full flex flex-col text-start">
+        <p class="text-lg">Welcome to UPFCON.</p>
+        <p>Please set a password for your account.</p>
+      </div>
+    </div>
+    <div class="flex-col w-[40vw] max-w-xl h-[20vh] max-h-2xl rounded-b-3xl ">
+      <div class="flex flex-col">
+        <form [formGroup]="confirmationForm" class="w-full h-full px-16 py-5">
+          @if (showAlert) {
+            <app-error-div
+              [errorMsg]="errorMsg"
+              [src]="src"
+              [color]="color"
+            />
+          }
+          <fieldset>
+            <div class="flex w-full p-3 flex-col">
+              <label class="px-2 pb-2 font-mono">New password</label>
+              <input type="password" required formControlName="newPassword" placeholder="New password"
+                     class="p-2 input rounded-lg border-2 border-gray-200">
+              <app-password-errors [passwordAbstractControl]="confirmationForm.get('newPassword')"
+                                   [requiredErr]="'Please provide the new password'"/>
+            </div>
+            <div class="flex w-full px-3 pt-3 flex-col">
+              <label class="px-2 pb-2 font-mono">Confirm password</label>
+              <input type="password" required formControlName="confirmPassword" placeholder="Confirm password"
+                     class="p-2 input rounded-lg border-2 border-gray-200">
+              <app-password-errors [passwordAbstractControl]="confirmationForm.get('confirmPassword')"
+                                   [requiredErr]="'You must confirm your password'"/>
+            </div>
+          </fieldset>
+        </form>
+        <div class="flex text-white justify-center gap-5">
+          <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800"
+                  (click)="activateAccount()">
+            Save
+          </button>
+          <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800" (click)="onReset()">
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

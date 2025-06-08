@@ -6,35 +6,21 @@ import { environment } from '../environments/environment';
 import {LoginResponse} from '../interfaces/login-response.interface';
 import {LoginError} from '../interfaces/login-error.interface';
 import {Router} from '@angular/router';
+import {AccountActivationPayload} from '../interfaces/account-activation-payload.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = `${environment.apiBaseUrl}/auth/login`;
+  private readonly apiUrl = `${environment.apiBaseUrl}/auth`;
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(payload: LoginPayload) : void {
-    const loginResponseObservable  : Observable<LoginResponse> = this.http.post<LoginResponse>(
-      this.apiUrl, payload
-    );
+  login(payload: LoginPayload) : Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.apiUrl + "/login", payload);
+  }
 
-    console.log("Logging in...")
-    loginResponseObservable.subscribe({
-      next: (res : LoginResponse) => {
-        console.log('Login success');
-        localStorage.setItem("jwt", res.accessToken);
-        this.router.navigate(['/profile']);
-      },
-      error: (err: HttpErrorResponse) => {
-        if (err.error && typeof err.error === 'object') {
-          const loginError = err.error as LoginError;
-          console.error(`Login failed [${loginError.status}]: ${loginError.message}`);
-        } else {
-          console.error('Unexpected error:', err);
-        }
-      }
-    });
+  activateAccount(payload: AccountActivationPayload, userId: string) {
+    return this.http.post(`${this.apiUrl}/activate-account/${userId}`, payload);
   }
 }

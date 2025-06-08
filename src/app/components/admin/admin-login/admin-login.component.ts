@@ -1,35 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
-import {ErrorDivComponent} from '../error-div/error-div.component';
-import {LoginResponse} from '../../interfaces/login-response.interface';
+import {ErrorDivComponent} from '../../error-div/error-div.component';
+import {AuthService} from '../../../services/auth.service';
+import {JwtDecoderService} from '../../../services/jwt-decoder.service';
+import {LoginResponse} from '../../../interfaces/login-response.interface';
 import {HttpErrorResponse} from '@angular/common/http';
-import {LoginError} from '../../interfaces/login-error.interface';
-import {UserProfileService} from '../../services/user-profile.service';
-import {JwtDecoderService} from '../../services/jwt-decoder.service';
+import {LoginError} from '../../../interfaces/login-error.interface';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
+  selector: 'app-admin-login',
+  templateUrl: './admin-login.component.html',
   imports: [
     ReactiveFormsModule,
     RouterLink,
     ErrorDivComponent
   ],
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./admin-login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class AdminLoginComponent implements OnInit {
   loginForm!: FormGroup;
   showPassword: boolean = false;
   err: string = '';
   showAlert: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private jwtDecoderService : JwtDecoderService) {
-    if (this.jwtDecoderService.isValid()) {
-      this.router.navigate(['/profile']);
-      return;
-    }
+    // if (this.jwtDecoderService.isValid()) {
+    //   this.router.navigate(['/profile']);
+    //   return;
+    // }
   }
 
   ngOnInit(): void {

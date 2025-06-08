@@ -36,15 +36,19 @@ export class JwtDecoderService {
     return token;
   }
 
-  extractRoles(): string[] | null {
+  extractRoles(): boolean {
     const token = this.isValid();
 
     if (!token)
-      return null;
+      return false;
 
-    if ("http://schemas.microsoft.com/ws/2008/06/identity/claims/role" in token)
-      return token["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string[];
+    if ("http://schemas.microsoft.com/ws/2008/06/identity/claims/role" in token) {
+      const roles = token["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string[];
 
-    return null;
+      localStorage.setItem('roles', roles.join(','));
+      return true;
+    }
+
+    return false;
   }
 }

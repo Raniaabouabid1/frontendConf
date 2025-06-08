@@ -89,6 +89,8 @@
       }
       <button type="button" class="rounded-lg w-fit py-2 px-4 bg-black hover:bg-gray-800" (click)="showEditCredentialsModel(true)">Edit credentials
       </button>
+      <button type="button" class="rounded-lg w-fit py-2 px-4 bg-red-700 hover:bg-red-500" (click)="showDeleteAccountModal(true)">Delete account
+      </button>
     </div>
   </div>
   @if (showModal) {
@@ -96,5 +98,8 @@
   }
   @if (showChangeCredentialsModal) {
     <app-edit-credentials [oldEmail]="email" (closeModalEvent)="showEditCredentialsModel($event)"/>
+  }
+  @if (showDeleteAccountWarningModal) {
+    <app-warning-modal [h3]="'Danger zone'" [message]="'Are you sure you want to delete your account? This action is permanent and cannot be undone.'" (respond)="showDeleteAccountModal($event)"></app-warning-modal>
   }
 </div>

@@ -1,0 +1,17 @@
+@if (abstractControl?.invalid && abstractControl?.touched) {
+  @if (abstractControl?.errors?.['required']) {
+    <app-input-error [errorMsg]="requiredErr"/>
+  } @else if (abstractControl?.errors?.['minlength']) {
+    <app-input-error [errorMsg]="minLenErr"/>
+  } @else if (abstractControl?.errors?.['maxlength']) {
+    <app-input-error [errorMsg]="'Max length exceeded'"/>
+  } @else if (abstractControl?.errors?.['pattern']) {
+    <app-input-error [errorMsg]="patternErr"/>
+  } @else if (abstractControl?.errors?.['fieldsMismatch']) {
+    <app-input-error [errorMsg]="'The passwords don\'t match'"/>
+  } @else if (abstractControl?.errors?.['email']) {
+    <app-input-error [errorMsg]="'Invalid email'"/>
+  } @else if (abstractControl?.errors?.['tooYoung']) {
+    <app-input-error [errorMsg]="'Must be at least 18 years old'"/>
+  }
+}
