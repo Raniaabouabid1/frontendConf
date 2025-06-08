@@ -11,7 +11,7 @@ import {
   FormArray,
 } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {NgForOf} from '@angular/common';
 import {ErrorDivComponent} from '../error-div/error-div.component';
 
@@ -27,14 +27,14 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   showAlert = false;
   maxBirthdate!: string;
-  selectedRoles: string[] = [];
+  selectedRoles: string[] = ["Attendee"];
 
-  constructor(private fb: FormBuilder, private userSignupService: UserSignupService) {
+  constructor(private fb: FormBuilder, private userSignupService: UserSignupService, private router: Router) {
     this.signupForm = this.fb.group({
       Roles: this.fb.group({
         Author: [false],
         Chairman: [false],
-        Attendee: [false]
+        Attendee: [true],
       }),
       isInternal: [null],
       expertise: [''],
@@ -53,6 +53,9 @@ export class SignupComponent implements OnInit {
       confirmPwd: ['', Validators.required],
       Diplomas: this.fb.array([this.createDiplomaFormGroup()]),
     });
+
+    // this.signupForm.get("Roles")?.get("Attendee")?.disable();
+    console.log(this.signupForm.get("Roles")?.value);
   }
 
   minimumAgeValidator(minAge: number): ValidatorFn {
@@ -143,6 +146,7 @@ export class SignupComponent implements OnInit {
       this.step--;
     }
   }
+
   displayStep(): number {
     return this.isDiplomaStepRequired() ? this.step : (this.step === 3 ? 2 : this.step);
   }
@@ -226,7 +230,10 @@ export class SignupComponent implements OnInit {
       };
 
       this.userSignupService.registerUser(payload).subscribe({
-        next: res => console.log('Registration successful:', res),
+        next: res => {
+          console.log('Registration successful:', res);
+          this.router.navigate(['/']);
+        },
         error: err => console.error('Registration failed:', err)
       });
     }

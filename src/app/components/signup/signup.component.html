@@ -63,8 +63,8 @@
               <input type="checkbox" value="Chairman" (change)="onRoleChange('Chairman', $event)" [checked]="selectedRoles.includes('Chairman')" class="accent-indigo-500">
               Chairman
             </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="Attendee" (change)="onRoleChange('Attendee', $event)" [checked]="selectedRoles.includes('Attendee')" class="accent-indigo-500">
+            <label class="flex items-center gap-2">
+              <input type="checkbox" (click)="$event.preventDefault()" tabindex="-1" value="Attendee" class="accent-indigo-500" [checked]="selectedRoles.includes('Attendee')">
               Attendee
             </label>
           </div>

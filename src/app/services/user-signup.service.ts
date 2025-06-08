@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { User } from '../interfaces/user.interface';
-import{environment} from '../environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {User} from '../interfaces/user.interface';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserSignupService {
-  private readonly apiUrl = `${environment.apiBaseUrl}/auth/signup`;
+  private readonly apiUrl = `${environment.apiBaseUrl}/auth/register`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
+
   registerUser(data: User): Observable<any> {
     const formData = new FormData();
 
@@ -25,6 +27,13 @@ export class UserSignupService {
     formData.append('Birthdate', data.Birthdate);
     formData.append('Address', data.Address);
     formData.append('Password', data.Password);
+    if (data.Roles.includes("Chairman")) {
+      formData.append('IsInternal', data.IsInternal ? "true" : "false");
+    }
+
+    if (data.Roles.includes("Author")) {
+      formData.append('Expertise', data.Expertise);
+    }
 
     if (data.Diplomas.length === 0) {
       formData.append('Diplomas', '[]');

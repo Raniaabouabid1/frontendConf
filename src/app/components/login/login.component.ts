@@ -26,10 +26,8 @@ export class LoginComponent implements OnInit {
   showAlert: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private jwtDecoderService : JwtDecoderService) {
-    if (this.jwtDecoderService.isValid()) {
+    if (this.jwtDecoderService.isValid())
       this.router.navigate(['/profile']);
-      return;
-    }
   }
 
   ngOnInit(): void {

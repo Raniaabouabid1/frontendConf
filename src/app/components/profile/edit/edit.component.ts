@@ -27,19 +27,20 @@ export class EditComponent {
   originalForm: FormGroup;
 
   isDisabled: boolean = true;
-  buttonLabel: string = "Edit information";
   @Input() isAuthor: boolean = false;
-  h3: string = "Changing personal information";
-  message: string = "Are you sure you want to persist the changes made to your profile? This action is irreversible!"
   showModal: boolean = false;
   editResponse: boolean = false;
   showAlert: boolean = false;
   showChangeCredentialsModal: boolean = false;
+  showDeleteAccountWarningModal: boolean = false;
+
+  buttonLabel: string = "Edit information";
+  h3: string = "Changing personal information";
+  message: string = "Are you sure you want to persist the changes made to your profile? This action is irreversible!"
   errorMsg: string = "";
   src: string = '';
   color: string = '';
   email: string = '';
-  showDeleteAccountWarningModal: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
               private userProfileService: UserProfileService,
@@ -69,6 +70,9 @@ export class EditComponent {
       },
       error: (error: HttpErrorResponse) => {
         console.error(error);
+        localStorage.removeItem("jwt")
+        localStorage.removeItem("roles")
+        this.router.navigate(['/']);
       }
     });
   }
@@ -94,8 +98,8 @@ export class EditComponent {
   createFormGroup() {
     return this.formBuilder.group({
       description: ["", [Validators.maxLength(255)]],
-      firstName: ["", [Validators.required, Validators.maxLength(100), Validators.pattern(/^[A-Za-zÀ-ÿ\s'-]+$/)]],
-      lastName: ["", [Validators.required, Validators.maxLength(100), Validators.pattern(/^[A-Za-zÀ-ÿ\s'-]+$/)]],
+      firstName: ["", [Validators.required, Validators.maxLength(100)]],
+      lastName: ["", [Validators.required, Validators.maxLength(100)]],
       email: ["", [Validators.required, Validators.email, Validators.maxLength(255)]],
       phoneNumber: ["", [Validators.required, Validators.pattern(/^\+212[6-7]\d{8}$/)]],
       birthdate: ["", [Validators.required, this.userProfileService.minimumAgeValidator(18)]],

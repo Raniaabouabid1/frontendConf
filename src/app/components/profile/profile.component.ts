@@ -15,7 +15,6 @@ import {JwtDecoderService} from '../../services/jwt-decoder.service';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  roles: string[] | null = [];
   isAuthor : boolean = false;
   isChairman : boolean = false;
   isAttendee : boolean = true;
