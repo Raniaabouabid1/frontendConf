@@ -24,7 +24,8 @@ export class AuthService {
       next: (res : LoginResponse) => {
         console.log('Login success');
         localStorage.setItem("jwt", res.accessToken);
-        this.router.navigate(['/profile']);
+        console.log('Login success jwt '+res.accessToken);
+        this.router.navigate(['/events']);
       },
       error: (err: HttpErrorResponse) => {
         if (err.error && typeof err.error === 'object') {

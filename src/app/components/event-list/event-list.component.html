@@ -1,0 +1,91 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-yellow-100 via-white to-yellow-200">
+  <div class="bg-white rounded-3xl shadow-2xl w-[90vw] max-w-7xl h-[90vh] max-h-3xl ">
+    <div class="p-1 shadow-lg w-[90vw] max-w-7xl h-[9vh] max-h-lg  rounded-t-3xl flex flex-row justify-between">
+      <div class="w-1/4 flex ">
+        <a routerLink="/signup"><img class="h-full rounded-full ml-10 border-2" src="logo.png" alt="UPFCON Logo"/></a>
+      </div>
+      <div class="w-3/4 h-full flex items-center divide-x divide-gray-200">
+        <!--        <p class="text-3xl">Welcome back Assimine!</p>-->
+        <div class="flex-1 justify-center h-full flex items-center px-5 py-0 rounded-tl-3xl hover:bg-gray-100">
+          <a routerLink="edit">Manage my profile</a>
+        </div>
+        <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
+          <a routerLink="diplomas">My diplomas</a>
+        </div>
+        <div class="flex-1 justify-center h-full flex items-center px-5 py-0  hover:bg-gray-100">
+          <a routerLink="submissions">My submissions</a>
+        </div>
+        <div class="flex-1 justify-center h-full flex items-center px-5 py-0  hover:bg-gray-100">
+          <a routerLink="events">My events</a>
+        </div>
+        <div class="flex-1 justify-center h-full flex items-center px-5 py-0 rounded-tr-3xl  hover:bg-gray-100">
+          <a routerLink="evaluations">Evaluate papers</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex-2/3 flex-col w-[90vw] max-w-7xl h-[80vh] max-h-lg rounded-b-3xl ">
+      <div class="min-h-screen bg-white p-6 sm:p-8">
+        <div class="relative mb-10">
+          <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800">Explore Our Events</h2>
+          <button
+            class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition-all flex items-center gap-2"
+            routerLink="/request-event">
+            <img src="/pitch.png" class="h-5 w-5" alt="pitch icon">
+            Pitch Your Event Idea
+          </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          @for (event of pagedEvents[currentPage]; track event.id) {
+            <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
+              <div class="w-full h-48 group-hover:h-40 transition-all duration-500 ease-in-out bg-gray-200 overflow-hidden flex items-center justify-center">
+                <img
+                  [src]="event.logo || 'event-default.jpg'"
+                  alt="Event Logo"
+                  (error)="event.logo = 'event-default.jpg'"
+                  class="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div class="p-4 flex flex-col justify-between flex-grow">
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1 truncate">{{ event.title }}</h3>
+                  <p class="text-sm text-gray-600 line-clamp-2">{{ event.description }}</p>
+                </div>
+                <div class="max-h-0 group-hover:max-h-[200px] overflow-hidden transition-all duration-500 ease-in-out mt-4 space-y-2 text-sm text-gray-700">
+                  <p><strong>📍</strong> {{ event.location }}</p>
+                  <p><strong>📅</strong> {{ event.startsAt | date:'mediumDate' }} - {{ event.endsAt | date:'mediumDate' }}</p>
+                  <p>
+                    <strong>📌</strong>
+                    <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold"
+                          [ngClass]="{
+                      'bg-green-100 text-green-800': event.status === 'Approved',
+                      'bg-yellow-100 text-yellow-800': event.status === 'Pending',
+                      'bg-red-100 text-red-800': event.status === 'Rejected'
+                    }">
+                {{ event.status || 'Pending' }}
+              </span>
+                  </p>
+                  <button
+                    (click)="openModal(event)"
+                    class="w-full mt-2 text-sm bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+                  >
+                    🔍 Discover Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        <app-pagination
+          [currentPage]="currentPage"
+          [totalPages]="pagedEvents.length"
+          (next)="nextPage()"
+          (prev)="prevPage()"
+        ></app-pagination>
+
+        @if (selectedEvent) {
+          <app-event-modal [event]="selectedEvent" (close)="selectedEvent = null" />
+        }
+      </div>
+    </div>
+  </div>
+</div>
