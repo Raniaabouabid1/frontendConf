@@ -1,0 +1,19 @@
+<div class="sticky bottom-0 bg-yellow-50 py-4 flex justify-center items-center gap-4 z-10">
+  <button
+    class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50"
+    (click)="prev.emit()"
+    [disabled]="currentPage === 0"
+  >
+    ← Prev
+  </button>
+
+  <span class="text-sm text-gray-700">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+
+  <button
+    class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50"
+    (click)="next.emit()"
+    [disabled]="currentPage >= totalPages - 1"
+  >
+    Next →
+  </button>
+</div>

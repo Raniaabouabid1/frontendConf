@@ -1,0 +1,49 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-yellow-100 via-white to-yellow-200 px-6 py-10">
+  <div class="bg-white shadow-2xl rounded-3xl w-full max-w-5xl h-[90vh] overflow-hidden flex flex-col">
+    <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+      <h2 class="text-2xl font-bold text-gray-800">Request an Event</h2>
+    </div>
+
+    <!-- Scrollable form content -->
+    <div class="flex-1 overflow-y-auto p-6">
+      <form [formGroup]="eventRequestForm" (ngSubmit)="submitEvent()" class="space-y-6">
+
+        <!-- Two-column grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          @for (field of eventFields; track field.name) {
+            <div class="flex flex-col">
+              <label class="px-2 pb-2 font-mono text-sm">{{ field.label }}</label>
+              <!-- Inside the @for loop -->
+              <ng-container *ngIf="field.name !== 'logo'; else fileInput">
+                <input [type]="field.type" [formControlName]="field.name" [placeholder]="field.label"
+                       class="p-2 input rounded-lg border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+              </ng-container>
+
+              <ng-template #fileInput>
+                <input type="file" (change)="onFileSelected($event)" accept="image/*"
+                       class="p-2 rounded-lg border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+              </ng-template>
+
+
+            </div>
+          }
+        </div>
+
+        <!-- Description -->
+        <div class="flex flex-col">
+          <label class="px-2 pb-2 font-mono text-sm">Description</label>
+          <textarea formControlName="description" rows="4" placeholder="Describe your event"
+                    class="p-2 input rounded-lg border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-400"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-center pt-2">
+          <button type="submit"
+                  class="bg-black text-white py-2 px-6 rounded-lg hover:bg-gray-800 transition-all">
+            Submit Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
