@@ -43,7 +43,8 @@ export class JwtDecoderService {
       return false;
 
     if ("http://schemas.microsoft.com/ws/2008/06/identity/claims/role" in token) {
-      const roles = token["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string[];
+      const roles  = token["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string[];
+      console.log(roles);
 
       localStorage.setItem('roles', roles.join(','));
       return true;
