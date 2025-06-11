@@ -1,11 +1,11 @@
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-yellow-100 via-white to-yellow-200">
   <div class="bg-white rounded-3xl shadow-2xl w-[90vw] max-w-7xl h-[90vh] max-h-3xl ">
-    <div class="p-1 shadow-lg w-[90vw] max-w-7xl h-[9vh] max-h-lg  rounded-t-3xl flex flex-row justify-between">
-      <div class="w-1/4 flex ">
-        <a routerLink="/signup"><img class="h-full rounded-full ml-10 border-2" src="logo.png" alt="UPFCON Logo"/></a>
+    <div class="relative shadow-lg w-[90vw] max-w-7xl h-[9vh] max-h-lg  rounded-t-3xl flex flex-row justify-center items-center">
+      <div class="absolute left-5 flex ">
+        <a routerLink="/signup"><img class="w-14 h-14 rounded-full border-2" src="logo.png" alt="UPFCON Logo"/></a>
       </div>
-      <div class="w-3/4 h-full flex items-center divide-x divide-gray-200">
-        <div class="flex-1 justify-center h-full flex items-center px-5 py-0 rounded-tl-3xl hover:bg-gray-100">
+      <div class="h-full flex items-center divide-x divide-gray-200">
+        <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
           <a routerLink="edit">Profile</a>
         </div>
         @if (isChairman || isAuthor) {
@@ -14,22 +14,22 @@
           </div>
         }
         @if (isAuthor) {
-          <div class="flex-1 justify-center h-full flex items-center px-5 py-0  hover:bg-gray-100">
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
             <a routerLink="submissions">Submissions</a>
           </div>
         }
         @if (isChairman || isAttendee) {
-          <div class="flex-1 justify-center h-full flex items-center px-5 py-0  hover:bg-gray-100">
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
             <a routerLink="events">Events</a>
           </div>
         }
         @if (isChairman) {
-          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 rounded-tr-3xl  hover:bg-gray-100">
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
             <a routerLink="evaluations">Evaluations</a>
           </div>
         }
         @if (isBoardDirector) {
-          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 rounded-tr-3xl  hover:bg-gray-100">
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
             <a routerLink="decisions">Decisions</a>
           </div>
         }

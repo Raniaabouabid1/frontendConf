@@ -27,7 +27,7 @@ export class EditComponent {
   originalForm: FormGroup;
 
   isDisabled: boolean = true;
-  @Input() isAuthor: boolean = false;
+  isAuthor: boolean = false;
   showModal: boolean = false;
   editResponse: boolean = false;
   showAlert: boolean = false;

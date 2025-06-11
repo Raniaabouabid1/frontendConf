@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import {LoginResponse} from '../interfaces/login-response.interface';
 import {environment} from '../environments/environment';
 import {ChangePassword} from '../interfaces/change-password.interface';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class UserProfileService {
 
   readonly ROOT_URL = environment.apiBaseUrl + '/users/profile';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
   minimumAgeValidator(minAge: number): ValidatorFn {
@@ -27,29 +28,23 @@ export class UserProfileService {
     };
   }
 
-  setHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('jwt')
-    });
-  }
+
 
   getUserProfileInformation() {
-    let headers: HttpHeaders = this.setHeaders();
-    return this.http.get<UserProfile>(this.ROOT_URL, {headers: headers});
+    let headers = this.authService.setHeaders();
+    return this.http.get<UserProfile>(this.ROOT_URL, headers);
   }
 
   editUserProfileInformation(userProfile: UserProfile) {
-    let headers: HttpHeaders = this.setHeaders();
+    let headers = this.authService.setHeaders();
     console.log(userProfile);
 
-    return this.http.put(this.ROOT_URL, userProfile, {headers: headers})
+    return this.http.put(this.ROOT_URL, userProfile, headers)
   }
 
   editAccountPassword(passwords: ChangePassword) {
-    let headers: HttpHeaders = this.setHeaders();
-    return this.http.put(this.ROOT_URL + "/password", passwords, {headers: headers});
+    let headers = this.authService.setHeaders();
+    return this.http.put(this.ROOT_URL + "/password", passwords, headers);
   }
 
   fieldsMatchValidator(field1: string, field2: string): ValidatorFn {

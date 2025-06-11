@@ -1,0 +1,33 @@
+.adminBg {
+  @apply
+  from-blue-100
+  via-blue-200
+  to-blue-300
+}
+
+.regularBg {
+  @apply
+  from-yellow-100
+  via-white
+  to-yellow-200
+}
+
+.adminImgSize {
+  @apply
+  max-w-[350px]
+}
+
+.regularImgSize {
+  @apply
+  max-w-[250px]
+}
+
+.yellowText {
+  @apply
+  text-yellow-400
+}
+
+.blueText {
+  @apply
+  text-blue-400
+}
