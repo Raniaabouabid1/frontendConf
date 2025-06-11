@@ -12,3 +12,7 @@ export interface Paper {
     contributorsNames: string[];
     evaluations: any[]; 
   }
+
+  export interface ContributorDto {
+    authorId: string;
+  }

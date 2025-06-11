@@ -21,6 +21,12 @@ export class PaperService {
     });
   }
 
+  setHeaders2(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+    });
+  }
+
   getPapersByEventId(eventId: string): Observable<Paper[]> {
     const headers = this.setHeaders();
     const url = `${this.apiUrl}/${eventId}/papers`;
@@ -32,5 +38,11 @@ export class PaperService {
     const headers = this.setHeaders();
     const url = `${this.apiUrl}/${eventId}/papers/${paperId}`;
     return this.http.get<Paper>(url, { headers });
+  }
+
+  createPaper(eventId: string, formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${eventId}/papers`, formData, {
+      headers: this.setHeaders2()
+    });
   }
 }

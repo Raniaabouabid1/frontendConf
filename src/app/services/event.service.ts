@@ -21,15 +21,6 @@ export class EventService {
     });
   }
 
-  setHeaders2(): HttpHeaders {
-    console.log("Secret Token: ", localStorage.getItem('jwt'));
-    return new HttpHeaders({
-      'Accept': 'Multipart/form-data',
-      'Content-Type': 'Multipart/form-data',
-      'Authorization': 'Bearer ' + localStorage.getItem('jwt')
-    });
-  }
-
   getEvents(): Observable<Event[]> {
     console.log('Sending request to:', this.apiUrl);
     const headers = this.setHeaders();

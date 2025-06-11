@@ -1,4 +1,5 @@
 import { Routes } from "../../node_modules/@angular/router/router_module.d-mlGavL8F";
+import { PaperCreationComponent } from "./components/Paper/paper-creation/paper-creation.component";
 import { PaperDetailsComponent } from "./components/Paper/paper-details/paper-details.component";
 import { PaperListComponent } from "./components/Paper/paper-list/paper-list.component";
 import { ActivateAccountComponent } from "./components/activate-account/activate-account.component";
@@ -33,8 +34,9 @@ export const routes: Routes = [
   },
   { path: 'admin/login', component: AdminLoginComponent },
 
-  { path: 'paper-list', component: PaperListComponent },
+  { path: 'event/:eventId/paper-list', component: PaperListComponent },
   { path: 'event/:eventId/papers/:paperId', component: PaperDetailsComponent },
+  { path: 'event/papers/create', component: PaperCreationComponent },
 
   
   { path: '**', redirectTo: '' }
