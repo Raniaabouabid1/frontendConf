@@ -13,7 +13,6 @@ import {LoginError} from '../../../interfaces/login-error.interface';
   templateUrl: './admin-login.component.html',
   imports: [
     ReactiveFormsModule,
-    RouterLink,
     ErrorDivComponent
   ],
   styleUrls: ['./admin-login.component.css']

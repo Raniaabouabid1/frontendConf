@@ -8,6 +8,8 @@ import {AdminComponent} from './components/admin/admin.component';
 import {ManageAdminsComponent} from './components/admin/manage-admins/manage-admins.component';
 import {AddEditAdminComponent} from './components/admin/add-edit-admin/add-edit-admin.component';
 import {ActivateAccountComponent} from './components/activate-account/activate-account.component';
+import {EventComponent} from './components/event/event.component';
+import {RequestEventComponent} from './components/event/request-event/request-event.component';
 
 export const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -30,5 +32,7 @@ export const routes: Routes = [
     ]
   },
   {path: 'admin/login', component: AdminLoginComponent},
+  {path: 'events', component: EventComponent},
+  {path: 'request-event', component: RequestEventComponent},
   {path: '**', redirectTo: ''}
 ];

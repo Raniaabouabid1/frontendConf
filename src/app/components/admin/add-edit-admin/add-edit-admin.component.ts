@@ -17,7 +17,6 @@ import {AdminService} from '../../../services/admin.service';
   imports: [
     ReactiveFormsModule,
     WarningModalComponent,
-    InputErrorComponent,
     ErrorDivComponent,
     EditCredentialsComponent,
     InputErrorsComponent
