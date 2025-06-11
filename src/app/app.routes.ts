@@ -1,4 +1,5 @@
 import { Routes } from "../../node_modules/@angular/router/router_module.d-mlGavL8F";
+import { PaperDetailsComponent } from "./components/Paper/paper-details/paper-details.component";
 import { PaperListComponent } from "./components/Paper/paper-list/paper-list.component";
 import { ActivateAccountComponent } from "./components/activate-account/activate-account.component";
 import { AddEditAdminComponent } from "./components/admin/add-edit-admin/add-edit-admin.component";
@@ -32,8 +33,8 @@ export const routes: Routes = [
   },
   { path: 'admin/login', component: AdminLoginComponent },
 
-  // ✅ Your test route here BEFORE the wildcard
   { path: 'paper-list', component: PaperListComponent },
+  { path: 'event/:eventId/papers/:paperId', component: PaperDetailsComponent },
 
   
   { path: '**', redirectTo: '' }

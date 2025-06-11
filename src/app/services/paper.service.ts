@@ -27,4 +27,10 @@ export class PaperService {
     console.log('Fetching papers from:', url);
     return this.http.get<Paper[]>(url, { headers });
   }
+
+  getPaperById(eventId: string, paperId: string): Observable<Paper> {
+    const headers = this.setHeaders();
+    const url = `${this.apiUrl}/${eventId}/papers/${paperId}`;
+    return this.http.get<Paper>(url, { headers });
+  }
 }

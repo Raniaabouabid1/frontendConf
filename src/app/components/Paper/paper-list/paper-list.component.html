@@ -34,6 +34,9 @@
   
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           <ng-container *ngFor="let paper of pagedPapers[currentPage]">
+
+            <a [routerLink]="['/event', paper.eventId, 'papers', paper.id]" class="block group">
+              
             <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden flex flex-col">
               <div class="w-full h-48 bg-gray-200 overflow-hidden flex items-center justify-center">
                 <img
@@ -53,10 +56,11 @@
                  'bg-green-100 text-green-800': paper.status === 'Accepted',
                  'bg-red-100 text-red-800': paper.status === 'Reject'
                   }">
-    {{ paper.status }}
-  </span>
+                   {{ paper.status }}
+                 </span>
               </div>
             </div>
+          </a>
           </ng-container>
         </div>
   

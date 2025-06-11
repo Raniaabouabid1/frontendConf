@@ -4,14 +4,18 @@ import { PaperService } from '../../../services/paper.service';
 import { environment } from '../../../environments/environment';
 import { PaginationComponent } from "../../pagination/pagination.component";
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-paper-list',
-  imports: [PaginationComponent, CommonModule],
+  imports: [PaginationComponent, 
+    CommonModule,
+     RouterLink,],
   templateUrl: './paper-list.component.html',
   styleUrl: './paper-list.component.css'
 })
 export class PaperListComponent implements OnInit {
-  @Input() eventId: string = "f3350fae-0c83-4632-bfae-7622b0cbcdf3";
+
+  @Input() eventId: string = "f3350fae-0c83-4632-bfae-7622b0cbcdf3"; // <app-paper-list [eventId]="selectedEventId"></app-paper-list>
 
   papers: Paper[] = [];
   pagedPapers: Paper[][] = [];
