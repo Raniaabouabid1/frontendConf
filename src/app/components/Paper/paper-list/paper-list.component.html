@@ -1,0 +1,72 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-yellow-100 via-white to-yellow-200">
+    <div class="bg-white rounded-3xl shadow-2xl w-[90vw] max-w-7xl h-[90vh] max-h-3xl">
+      <!-- Navbar -->
+      <div class="p-1 shadow-lg w-[90vw] max-w-7xl h-[9vh] rounded-t-3xl flex flex-row justify-between">
+        <div class="w-1/4 flex">
+          <a routerLink="/signup">
+            <img class="h-full rounded-full ml-10 border-2" src="logo.png" alt="UPFCON Logo" />
+          </a>
+        </div>
+        <div class="w-3/4 h-full flex items-center divide-x divide-gray-200">
+          <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
+            <a routerLink="edit">Manage my profile</a>
+          </div>
+          <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
+            <a routerLink="diplomas">My diplomas</a>
+          </div>
+          <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
+            <a routerLink="submissions">My submissions</a>
+          </div>
+          <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
+            <a routerLink="events">My events</a>
+          </div>
+          <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
+            <a routerLink="evaluations">Evaluate papers</a>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Paper List Section -->
+      <div class="bg-white p-6 sm:p-8 overflow-y-auto h-[80vh]">
+        <div class="relative mb-10">
+          <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800">Submitted Papers</h2>
+        </div>
+  
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <ng-container *ngFor="let paper of pagedPapers[currentPage]">
+            <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden flex flex-col">
+              <div class="w-full h-48 bg-gray-200 overflow-hidden flex items-center justify-center">
+                <img
+                  [src]="paper.path || 'paper-default.jpg'"
+                  alt="Paper Image"
+                  (error)="paper.path = 'paper-default.jpg'"
+                  class="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div class="p-4 flex flex-col justify-between flex-grow">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1 truncate">{{ paper.title }}</h3>
+                <p class="text-sm text-gray-600 truncate">📚 {{ paper.eventName }}</p>
+                <p class="text-sm text-gray-600 truncate">👤 {{ getHeadAuthor(paper.contributorsNames) }}</p>
+                <span class="mt-3 inline-block px-2 py-1 rounded text-xs font-semibold"
+                 [ngClass]="{
+                 'bg-yellow-100 text-yellow-800': paper.status === 'PendingEvaluation',
+                 'bg-green-100 text-green-800': paper.status === 'Accepted',
+                 'bg-red-100 text-red-800': paper.status === 'Reject'
+                  }">
+    {{ paper.status }}
+  </span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+  
+        <app-pagination
+          [currentPage]="currentPage"
+          [totalPages]="pagedPapers.length"
+          (next)="nextPage()"
+          (prev)="prevPage()"
+        ></app-pagination>
+      </div>
+    </div>
+  </div>
+  
