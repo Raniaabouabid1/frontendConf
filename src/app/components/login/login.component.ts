@@ -28,10 +28,14 @@ export class LoginComponent implements OnInit {
   showAlert: boolean = false;
   adminPortal: boolean = false;
   h2: string = '';
+  p: string = '';
+
+
 
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private jwtDecoderService: JwtDecoderService, private activatedRoute: ActivatedRoute) {
     this.adminPortal = this.router.url === "/admin/login";
+    this.p = this.adminPortal ? "Log in as a user" : "Log in as an admin";
 
     if (this.jwtDecoderService.isValid()) {
       let roles = localStorage.getItem("roles");

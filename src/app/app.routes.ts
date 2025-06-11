@@ -8,6 +8,7 @@ import {ManageAdminsComponent} from './components/admin/manage-admins/manage-adm
 import {AddEditAdminComponent} from './components/admin/add-edit-admin/add-edit-admin.component';
 import {ActivateAccountComponent} from './components/activate-account/activate-account.component';
 import {ForbiddenComponent} from './components/error-pages/forbidden/forbidden.component';
+import {TableComponent} from './components/table/table.component';
 
 export const routes: Routes = [
   {path: '', component: LoginComponent, pathMatch: 'full'},
@@ -27,9 +28,10 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     children: [
-      {path: 'manage-admins', component: ManageAdminsComponent},
+      {path: 'manage-admins', component: TableComponent},
       {path: 'manage-admins/add', component: AddEditAdminComponent},
       {path: 'manage-admins/edit/:adminId', component: AddEditAdminComponent},
+      {path: 'manage-users', component: TableComponent},
     ]
   },
   {path: 'admin/login', component: LoginComponent},

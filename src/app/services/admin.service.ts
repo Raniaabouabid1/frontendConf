@@ -5,6 +5,7 @@ import {environment} from '../environments/environment';
 import {Admin} from '../interfaces/admin.interface';
 import {AdminResponse} from '../interfaces/admin-response.interface';
 import {AuthService} from './auth.service';
+import {UserBasicInfoResponse} from '../interfaces/user-basic-info-response.interface';
 
 interface queryParam {
   key: string;
@@ -40,14 +41,15 @@ export class AdminService {
     return this.http.delete(`${this.URL}/${id}`, headers);
   }
 
-  getAdmins(page: number, pageSize: number = 8) {
+  getUsers(entity: string, page: number, pageSize: number = 8) {
     const queryParams = this.createQueryParams([
       {key: "page", value: page},
       {key: "pageSize", value: pageSize},
     ]);
     const headers = this.authService.setHeaders();
+    const endpoint = `${environment.apiBaseUrl}/${entity}`;
 
-    return this.http.get<AdminResponse>(this.URL, {...queryParams, ...headers});
+    return this.http.get<UserBasicInfoResponse>(endpoint, {...queryParams, ...headers});
   }
 
   getAdminById(id: string) {

@@ -21,3 +21,13 @@
   @apply
   max-w-[250px]
 }
+
+.yellowText {
+  @apply
+  text-yellow-400
+}
+
+.blueText {
+  @apply
+  text-blue-400
+}

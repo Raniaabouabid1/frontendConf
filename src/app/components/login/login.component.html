@@ -61,7 +61,16 @@
         </p>
       }
     </div>
-    <div class="hidden md:flex flex-1 bg-black text-white items-center justify-center p-6 sm:p-10">
+    <div class="hidden relative md:flex flex-1 bg-black text-white items-center justify-center p-6 sm:p-10">
+      <a [routerLink]="adminPortal ? '/login' : '/admin/login'">
+        <div class="absolute top-5 flex items-center gap-5 rounded-3xl bg-white px-5">
+          <p class="text-xl p-1 font-mono font-semibold"
+             [ngClass]="{blueText: !adminPortal, yellowText: adminPortal}"
+          >{{ p }}</p>
+          <img [src]="adminPortal ? '/left-arrow.png' : '/left-arrow-blue.png'"
+               [alt]="adminPortal ? 'Yellow arrow' : 'Blue arrow'" class="rotate-180"/>
+        </div>
+      </a>
       <div class="text-center space-y-6 max-w-sm">
         <img [src]="setImage()" alt="It's an image what do you want me to say?"
              class="w-full mx-auto transition-transform duration-500 hover:scale-105"
