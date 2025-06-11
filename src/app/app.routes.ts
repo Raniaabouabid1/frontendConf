@@ -5,6 +5,8 @@ import {EditComponent} from './components/profile/edit/edit.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {AdminComponent} from './components/admin/admin.component';
 import {ActivateAccountComponent} from './components/activate-account/activate-account.component';
+import {EventComponent} from './components/event/event.component';
+import {RequestEventComponent} from './components/event/request-event/request-event.component';
 import {ForbiddenComponent} from './components/error-pages/forbidden/forbidden.component';
 import {TableComponent} from './components/table/table.component';
 import {AddEditUserComponent} from './components/add-edit-user/add-edit-user.component';
@@ -35,6 +37,9 @@ export const routes: Routes = [
       {path: 'manage-users/edit/:userId', component: AddEditUserComponent},
     ]
   },
+  {path: 'admin/login', component: AdminLoginComponent},
+  {path: 'events', component: EventComponent},
+  {path: 'request-event', component: RequestEventComponent},
   {path: 'admin/login', component: LoginComponent},
   {path: '**', redirectTo: ''}
 ];

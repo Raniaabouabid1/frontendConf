@@ -1,0 +1,191 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-yellow-100 via-white to-yellow-200">
+  <div class="bg-white rounded-3xl shadow-2xl w-[90vw] max-w-7xl h-[90vh] flex flex-col">
+    <div class="p-1 shadow-lg h-[9vh] flex flex-row justify-between rounded-t-3xl flex-shrink-0">
+      <div class="w-1/4 flex">
+        <a routerLink="/signup">
+          <img class="h-full rounded-full ml-10 border-2" src="/logo.png" alt="UPFCON Logo">
+        </a>
+      </div>
+      <div class="w-3/4 h-full flex items-center divide-x divide-gray-200">
+        <div class="flex-1 flex items-center justify-center px-5 hover:bg-gray-100 rounded-tl-3xl">
+          <a routerLink="edit">Profile</a>
+        </div>
+        @if (isChairman || isAuthor) {
+          <div class="flex-1 flex items-center justify-center px-5 hover:bg-gray-100">
+            <a routerLink="diplomas">Diplomas</a>
+          </div>
+        }
+        @if (isAuthor) {
+          <div class="flex-1 flex items-center justify-center px-5 hover:bg-gray-100">
+            <a routerLink="submissions">Submissions</a>
+          </div>
+        }
+        @if (isChairman || isAttendee) {
+          <div class="flex-1 flex items-center justify-center px-5 hover:bg-gray-100">
+            <a routerLink="events">Events</a>
+          </div>
+        }
+        @if (isChairman) {
+          <div class="flex-1 flex items-center justify-center px-5 hover:bg-gray-100 rounded-tr-3xl">
+            <a routerLink="evaluations">Evaluations</a>
+          </div>
+        }
+        @if (isBoardDirector) {
+          <div class="flex-1 flex items-center justify-center px-5 hover:bg-gray-100 rounded-tr-3xl">
+            <a routerLink="decisions">Decisions</a>
+          </div>
+        }
+      </div>
+    </div>
+        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+          <h2 class="text-2xl font-bold text-gray-800">Request an Event</h2>
+          <span class="text-sm text-gray-500">Step {{ step }} / 3</span>
+        </div>
+     <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="h-2 bg-indigo-500 rounded-full transition-all duration-500"
+                 [style.width.%]="progress"></div>
+          </div>
+       @if (step === 1) {
+        <form [formGroup]="eventRequestForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              @for (f of basicFields; track f.name) {
+                <ng-container>
+                  <div class="flex flex-col">
+                    <label class="px-2 pb-2 font-mono text-sm">{{ f.label }}</label>
+                    <input [type]="f.type"
+                           [placeholder]="f.label"
+                           [formControlName]="f.name"
+                           class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400">
+                  </div>
+                </ng-container>
+
+              }
+              </div>
+           <div class="flex flex-col mt-6">
+              <label class="px-2 pb-2 font-mono text-sm">Description</label>
+              <textarea rows="4" formControlName="description"
+                        placeholder="Describe your event"
+                        class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"></textarea>
+            </div>
+          </form>
+       }
+       @if (step === 2){
+        <form  [formGroup]="eventRequestForm">
+            <p class="font-semibold mb-4">Upload a logo (JPG/PNG, ≤ 1 MB)</p>
+            <input type="file"
+                   accept="image/*"
+                   (change)="onFileSelected($event)"
+                   class="p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400 w-full">
+          @if (logoPreview){
+          <div class="mt-4">
+              <img [src]="logoPreview" class="h-40 object-contain border rounded-lg mx-auto" alt="logo Preview">
+            </div>
+          }
+          <!-- recherche -->
+          <div class="relative md:w-1/2">
+            <input type="text"
+                   [(ngModel)]="searchTerm"
+                   (ngModelChange)="searchChairmen($event)"
+                   [ngModelOptions]="{standalone: true}"
+            placeholder="Search chairman…"
+                   class="input p-2 border rounded-lg w-full">
+
+            <!-- Liste déroulante -->
+            <ul *ngIf="suggestions.length"
+                class="absolute z-10 w-full bg-white border rounded-lg mt-1 max-h-56 overflow-y-auto shadow">
+              <li *ngFor="let s of suggestions"
+                  (click)="addChairman(s)"
+                  class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex flex-col">
+                <span>{{ s.name }}</span>
+                <span class="text-xs text-gray-500">{{ s.email }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Badges sélectionnés -->
+          <div class="flex flex-wrap gap-2 mt-3" *ngIf="committeeMembers.length">
+            <div *ngFor="let cm of committeeMembers.controls; let i = index"
+                 class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full flex items-center gap-1">
+              <span>{{ cm.value.name }}</span>
+              <button type="button" (click)="removeChairman(i)">✕</button>
+            </div>
+          </div>
+
+
+        </form>
+       }
+       @if (step === 3){
+         <form  [formGroup]="eventRequestForm">
+           <div formGroupName="submissionRules">
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">Font</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="text" formControlName="font">
+               </div>
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">Min Pages</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="number" formControlName="minPages">
+               </div>
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">Max Pages</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="number" formControlName="maxPages">
+               </div>
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">Formats</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="text" formControlName="formats">
+               </div>
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">Margins (mm)</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="number" formControlName="margins">
+               </div>
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">Line spacing</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="number" formControlName="lineSpacing">
+               </div>
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">File-name format</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="text" formControlName="fileNameFormat">
+               </div>
+               <div class="flex flex-col">
+                 <label class="px-2 pb-2 font-mono text-sm">Submission deadline</label>
+                 <input class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"
+                        type="date" formControlName="submissionDeadline">
+               </div>
+             </div>
+             <div class="mt-6 flex flex-col">
+               <label class="px-2 pb-2 font-mono text-sm">Additional rules</label>
+               <textarea rows="2"
+                         formControlName="additionalRules"
+                         class="input p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-yellow-400"></textarea>
+             </div>
+           </div>
+         </form>
+       }
+       <div class="flex justify-between pt-4">
+         @if (step > 1){
+            <button (click)="previousStep()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+              ← Back
+            </button>
+         }
+         @if (step < 3){
+            <button (click)="nextStep()" class="ml-auto px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+              Next →
+            </button>
+         }
+         @if (step === 3){
+            <button (click)="submitEvent()" [disabled]="eventRequestForm.invalid" class="ml-auto px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50">
+              Submit Request
+            </button>
+         }
+          </div>
+        </div>
+      </div>
+    </div>

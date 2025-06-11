@@ -15,7 +15,6 @@ import {AuthService} from '../../services/auth.service';
   imports: [
     ErrorDivComponent,
     FormsModule,
-    InputErrorsComponent,
     ReactiveFormsModule,
     RouterLink,
     PasswordErrorsComponent
