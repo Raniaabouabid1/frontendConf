@@ -1,3 +1,6 @@
+import{SubmissionRules} from "./submission-rules.interface";
+import {ChairmanSuggestion} from "./chairman-suggestion.interface";
+
 export interface Event {
   id: string;
   title: string;
@@ -12,4 +15,6 @@ export interface Event {
   logo: string;
   description: string;
   status?: 'Pending' | 'Approved' | 'Rejected' | 'ToBeRevised';
+  submissionRules: SubmissionRules;
+  chairmanSuggestions: ChairmanSuggestion[];
 }

@@ -1,0 +1,13 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-lg relative shadow-xl">
+    <button class="absolute top-2 right-2 text-gray-600" (click)="close.emit()">✖</button>
+    <h3 class="text-2xl font-bold mb-4">{{ event.title }}</h3>
+    <p class="mb-2 text-sm text-gray-700"><strong>Description:</strong> {{ event.description }}</p>
+    <p class="mb-2 text-sm"><strong>Location:</strong> {{ event.location }}</p>
+    <p class="mb-2 text-sm"><strong>Theme:</strong> {{ event.theme }}</p>
+    <p class="mb-2 text-sm"><strong>Topics:</strong> {{ event.topics }}</p>
+    <p class="mb-2 text-sm"><strong>Subtopics:</strong> {{ event.subTopics }}</p>
+    <p class="mb-2 text-sm"><strong>Event Type:</strong> {{ event.eventType }}</p>
+    <p class="mb-2 text-sm"><strong>Dates:</strong> {{ event.startsAt | date }} - {{ event.endsAt | date }}</p>
+  </div>
+</div>

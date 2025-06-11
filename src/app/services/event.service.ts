@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Event } from '../interfaces/event.interface';
 import {environment} from '../environments/environment';
+import { ChairmanSuggestion } from '../interfaces/chairman-suggestion.interface';   // <-- import
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class EventService {
     const headers = this.setHeaders();
     return this.http.get<Event[]>(this.apiUrl, { headers });
   }
+
   uploadLogo(formData: FormData): Observable<{ path: string }> {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + localStorage.getItem('jwt')
@@ -40,8 +42,14 @@ export class EventService {
     const headers = this.setHeaders();
     return this.http.post(`${this.apiUrl}`, eventDto,{headers});
   }
+  getChairmen(term: string) {
+    const headers = this.setHeaders();
+    return this.http.get<ChairmanSuggestion[]>(`${environment.apiBaseUrl}/chairmen?q=${term}`, { headers });
+  }
 
   getEventById(id: string): Observable<Event> {
     return this.http.get<Event>(`${this.apiUrl}/${id}`);
   }
 }
+
+
