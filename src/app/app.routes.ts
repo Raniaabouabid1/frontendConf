@@ -37,7 +37,6 @@ export const routes: Routes = [
       {path: 'manage-users/edit/:userId', component: AddEditUserComponent},
     ]
   },
-  {path: 'admin/login', component: AdminLoginComponent},
   {path: 'events', component: EventComponent},
   {path: 'request-event', component: RequestEventComponent},
   {path: 'admin/login', component: LoginComponent},
