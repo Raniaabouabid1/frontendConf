@@ -24,12 +24,17 @@ import {ErrorDivComponent} from '../error-div/error-div.component';
 })
 export class SignupComponent implements OnInit {
   step = 1;
-  signupForm: FormGroup;
+  signupForm!: FormGroup;
   showAlert = false;
   maxBirthdate!: string;
   selectedRoles: string[] = ["Attendee"];
 
   constructor(private fb: FormBuilder, private userSignupService: UserSignupService, private router: Router) {
+    if (localStorage.getItem("jwt")) {
+      this.router.navigate(['/profile']);
+      return
+    }
+
     this.signupForm = this.fb.group({
       Roles: this.fb.group({
         Author: [false],

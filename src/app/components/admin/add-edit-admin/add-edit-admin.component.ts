@@ -1,23 +1,26 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserProfileService} from '../../../services/user-profile.service';
-import {UserProfile} from '../../../interfaces/user-profile.interface';
-import {HttpErrorResponse} from '@angular/common/http';
 import {JwtDecoderService} from "../../../services/jwt-decoder.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {WarningModalComponent} from "../../warning-modal/warning-modal.component";
-import {InputErrorComponent} from "../../input-error/input-error.component";
 import {ErrorDivComponent} from "../../error-div/error-div.component";
 import {EditCredentialsComponent} from '../../profile/edit-credentials/edit-credentials.component';
 import {InputErrorsComponent} from '../../input-errors/input-errors.component';
 import {AdminService} from '../../../services/admin.service';
+import {Admin} from '../../../interfaces/admin.interface';
+import {AuthService} from '../../../services/auth.service';
+
+interface ErrorResponse {
+  status: number;
+  message: string;
+}
 
 @Component({
   selector: 'app-add-edit-admin',
   imports: [
     ReactiveFormsModule,
     WarningModalComponent,
-    InputErrorComponent,
     ErrorDivComponent,
     EditCredentialsComponent,
     InputErrorsComponent
@@ -26,16 +29,26 @@ import {AdminService} from '../../../services/admin.service';
   styleUrl: './add-edit-admin.component.css'
 })
 export class AddEditAdminComponent {
+  adminId: string | null = null;
+  admin: Admin = {
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    birthdate: "",
+    address: "",
+    accountStatus: ""
+  };
+
   editForm: FormGroup;
   originalForm: FormGroup;
+
   isEdit: boolean = false;
   isDisabled: boolean = true;
-  buttonLabel: string = "Edit information";
-  @Input() isAuthor: boolean = false;
   h3: string = "Changing personal information";
-  message: string = "Are you sure you want to persist the changes made to your profile? This action is irreversible!"
+  message: string = "Are you sure you want to save the changes made? This action is irreversible!"
   showModal: boolean = false;
-  editResponse: boolean = false;
   showAlert: boolean = false;
   showChangeCredentialsModal: boolean = false;
   errorMsg: string = "";
@@ -43,72 +56,68 @@ export class AddEditAdminComponent {
   color: string = '';
   email: string = '';
   showDeleteAccountWarningModal: boolean = false;
+  h1: string = "Create new admin";
+  hideButton: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
               private userProfileService: UserProfileService,
               private jwtDecoder: JwtDecoderService,
               private router: Router,
               private adminService: AdminService,
+              private activatedRoute: ActivatedRoute,
+              private authService: AuthService,
   ) {
-    // this.getRoles(this.router);
     this.editForm = this.createFormGroup();
     this.originalForm = this.createFormGroup();
-    const action = this.router.url.split('/').pop();
-    if (!action) {
-      this.router.navigate(['/login']);
+
+    if (!this.authService.isAdmin(this.router, this.jwtDecoder, '/admin/login')) {
+      this.router.navigate(['/403']);
       return;
     }
 
-    this.isEdit = action.toLowerCase() === 'edit';
-    console.log(this.isEdit);
+    this.adminId = this.activatedRoute.snapshot.paramMap.get("adminId");
+    this.isEdit = this.adminId !== null;
 
     if (this.isEdit) {
       this.editForm.disable();
-    }
+      this.adminService.getAdminById(this.adminId ?? "").subscribe({
+        next: admin => {
+          if (admin.accountStatus === "Deleted")
+            this.hideButton = true;
 
-    // this.userProfileService.getUserProfileInformation().subscribe({
-    //   next: (response: UserProfile) => {
-    //     const userProfile: UserProfile = {
-    //       ...response,
-    //       description: response.description ? response.description : "",
-    //       expertise: response.expertise ? response.expertise : "",
-    //       birthdate: response.birthdate.split("T")[0]
-    //     }
-    //
-    //     this.editForm.setValue(userProfile);
-    //     this.originalForm.setValue(this.editForm.value);
-    //     this.email = userProfile.email;
-    //     console.log(this.email);
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     console.error(error);
-    //   }
-    // });
+          console.log(admin);
+          this.admin = admin;
+          this.admin.birthdate = this.admin.birthdate.split("T")[0];
+          this.editForm.setValue(this.admin);
+          this.originalForm.setValue(this.admin);
+          this.h1 = `Update account: ${this.admin.firstName} ${this.admin.lastName}`;
+        },
+        error: error => {
+          console.log(error);
+        }
+      })
+    }
   }
 
-  // getRoles(router: Router) {
-  //   let roles = localStorage.getItem('roles');
-  //   if (!roles) {
-  //     const extracted = this.jwtDecoder.extractRoles();
-  //
-  //     if (!extracted) {
-  //       router.navigate(['/']);
-  //       return;
-  //     }
-  //
-  //     roles = localStorage.getItem('roles');
-  //   }
-  //
-  //   if (roles) {
-  //     this.isAuthor = roles.includes('Author');
-  //   }
-  // }
-  h1: string = "Create new admin";
+  ngOnInit(): void {
+    const navigation = this.router.getCurrentNavigation();
+    console.log(navigation);
+    const state = navigation?.extras?.state;
+    console.log(state);
 
-  createFormGroup() {
+    if (state?.['show']) {
+      this.showAlertMessage(state?.['message'], state?.['success']);
+      this.isEdit = true;
+      this.editForm.disable();
+    }
+  }
+
+  createFormGroup(): FormGroup {
     return this.formBuilder.group({
+      id: [""],
       firstName: ["", [Validators.required, Validators.maxLength(100), Validators.pattern(/^[A-Za-zÀ-ÿ\s'-]+$/)]],
       lastName: ["", [Validators.required, Validators.maxLength(100), Validators.pattern(/^[A-Za-zÀ-ÿ\s'-]+$/)]],
+      accountStatus: ["", Validators.required],
       email: ["", [Validators.required, Validators.email, Validators.maxLength(255)]],
       phoneNumber: ["", [Validators.required, Validators.pattern(/^\+212[6-7]\d{8}$/)]],
       birthdate: ["", [Validators.required, this.userProfileService.minimumAgeValidator(18)]],
@@ -116,29 +125,31 @@ export class AddEditAdminComponent {
     });
   }
 
-  toggleDisabled() {
-    if (!this.isDisabled) {
-      if (!this.editForm.valid) {
-        this.showAlert = true;
-        this.src = '/danger.png';
-        this.errorMsg = "Please fill out the form.";
-        this.color = 'red';
-        return;
-      }
-      this.showModal = true;
-      this.editForm.disable();
+  enableForm() {
+    this.isDisabled = false;
+    this.editForm.enable();
+    this.editForm.get("email")?.disable();
+  }
+
+  sendEditRequest() {
+    if (this.editForm.invalid) {
+      this.showAlertMessage("Please fill all the fields correctly", true);
+      return;
     }
 
-    this.isDisabled = !this.isDisabled;
+    this.showModal = true;
+  }
 
-    if (this.isDisabled) {
+  modalResponse(resp: boolean) {
+    this.showModal = false;
+    this.isEdit = true;
 
-    } else {
-      this.buttonLabel = "Confirm changes";
-      this.editForm.enable();
+    if (resp) {
+      this.addUpdateAdmin(false);
+      return;
     }
 
-    this.editForm.get('email')?.disable();
+    this.editForm.setValue(this.originalForm.value);
   }
 
   cancelChanges() {
@@ -146,7 +157,6 @@ export class AddEditAdminComponent {
     this.isDisabled = true;
     this.showAlert = false;
     this.editForm.disable();
-    this.buttonLabel = "Edit information";
   }
 
   onReset() {
@@ -154,94 +164,91 @@ export class AddEditAdminComponent {
     this.showAlert = false;
   }
 
-  modalResponse(resp: boolean) {
-    this.editResponse = resp;
-    if (this.editResponse) {
-      this.sendEditRequest();
-      this.originalForm.setValue(this.editForm.value);
-    }
-
-    this.showModal = false;
-    this.editForm.setValue(this.originalForm.value);
-    this.buttonLabel = "Edit information";
-  }
-
-  sendEditRequest(): void {
-    this.userProfileService.editUserProfileInformation(this.editForm.value).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.showAlert = true;
-        this.src = '/checked.png';
-        this.errorMsg = "Your profile has been updated successfully.";
-        this.color = 'green';
-        setTimeout(() => {
-          this.showAlert = false;
-        }, 4000);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error(error);
-        this.showAlert = true;
-        this.src = '/danger.png';
-        this.errorMsg = "Unable to edit profile information. Please try again later. If this problem persists, please contact our support team.";
-        this.color = 'red';
-        setTimeout(() => {
-          this.showAlert = false;
-        }, 4000);
-      }
-    });
-  }
-
   showEditCredentialsModel(show: boolean) {
     this.showChangeCredentialsModal = show;
   }
 
-  showDeleteAccountModal(show: boolean) {
-    this.showDeleteAccountWarningModal = show;
+  showDeleteAccountModal() {
+    this.showDeleteAccountWarningModal = true;
   }
 
-  navigateToForm() {
-    this.router.navigate(['/admin/manage-admins/add'])
+  deleteAdmin(remove: boolean) {
+    if (remove) {
+      this.adminService.deleteAdmin(this.adminId ?? "").subscribe({
+        next : res => {
+          this.router.navigateByUrl("/admin/manage-admins");
+        }, error: error => {
+          console.log(error);
+          this.showDeleteAccountWarningModal = false;
+          console.log(error.error.message);
+        }
+      })
+    }
   }
 
-  createAdmin() {
-    if (!this.editForm.valid) {
-      this.showAlert = true;
-      this.errorMsg = "You must fill out the form correctly.";
-      this.src = "/danger.png"
-      this.color = "red"
-      return;
+  showAlertMessage(msg: string, error: boolean) {
+    this.showAlert = true;
+
+    if (error) {
+      this.src = '/danger.png';
+      this.color = 'red';
+    } else {
+      this.src = '/checked.png';
+      this.color = 'green';
     }
 
-    this.adminService.createAdmin(this.editForm.value).subscribe({
+    this.errorMsg = msg;
+
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 7000);
+  }
+
+  addUpdateAdmin(add: boolean) {
+    this.editForm.enable();
+    let formData = {...this.editForm.value};
+
+    if (add) {
+      formData = {...formData, accountStatus: "Verified"};
+    } else {
+      this.editForm.disable();
+      this.isDisabled = true;
+    }
+
+    this.adminService.addUpdateAdmin(formData, add).subscribe({
       next: (response) => {
-        this.showAlert = true;
-        this.src = '/checked.png';
-        this.errorMsg = "Admin created successfully.";
-        this.color = 'green';
-
-        setTimeout(() => {
-          this.showAlert = false;
-        }, 7000);
-
         console.log(response);
-        this.isEdit = true;
-        this.editForm.disable();
+        if (add) {
+          if (response && "id" in response) {
+            this.router.navigate([`/admin/manage-admins/edit/${response.id}`], {
+              state: {
+                show: true,
+                success: true,
+                message: "Admin account created successfully."
+              }
+            });
+          }
+          return;
+        }
+
+        this.originalForm.setValue(formData);
+        this.showAlertMessage("Successfully updated admin account", false);
       },
       error: (err) => {
-        let message = "We were unable to create an admin account. Please try again. If this error persists, please contact our support team.";
-        if ('error' in err && 'message' in err.error)
-          message = err.error.message;
+        let message = `We were unable to ${add ? "create" : "update"} the account.
+        Please try again. If this error persists, please contact our support team.`;
 
-        this.showAlert = true;
-        this.errorMsg = message;
-        this.src = "/danger.png"
-        this.color = "red"
+        if (err?.status === 409)
+          message = err?.error?.message;
 
-        setTimeout(() => {
-          this.showAlert = false;
-        }, 8000);
+        if (!add)
+          this.editForm.setValue(this.originalForm.value);
+
+        this.showAlertMessage(message, true);
+        console.log(err);
       }
     });
   }
+
 
 }

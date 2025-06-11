@@ -1,9 +1,9 @@
 <div
-  class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-yellow-100 via-white to-yellow-200 px-4">
+  class="min-h-screen flex items-center justify-center bg-gradient-to-tr px-4" [ngClass]="setBackgroundGradient()">
   <div class="flex flex-col md:flex-row bg-white rounded-3xl shadow-lg overflow-hidden w-full max-w-4xl">
 
     <div class="flex-1 p-6 sm:p-10 md:p-14">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-4">Welcome Back to UPFCON!</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ h2 }}</h2>
       <p class="text-gray-600 mb-6 text-sm sm:text-base">Please enter your login details below</p>
       @if (showAlert) {
         <app-error-div [errorMsg]="err" [src]="'/danger.png'" [color]="'red'"/>
@@ -54,17 +54,23 @@
         </button>
       </form>
 
-      <p class="text-sm mt-6 text-center text-gray-600">
-        Don’t have an account?
-        <a routerLink="/signup" class="text-indigo-500 font-semibold">Sign Up</a>
-      </p>
+      @if (!adminPortal) {
+        <p class="text-sm mt-6 text-center text-gray-600">
+          Don’t have an account?
+          <a routerLink="/signup" class="text-indigo-500 font-semibold">Sign Up</a>
+        </p>
+      }
     </div>
     <div class="hidden md:flex flex-1 bg-black text-white items-center justify-center p-6 sm:p-10">
       <div class="text-center space-y-6 max-w-sm">
-        <img src="/loginIcon.jpeg" alt="Character"
-             class="w-full max-w-[250px] mx-auto transition-transform duration-500 hover:scale-105">
-        <h3 class="text-xl font-semibold">Pitch Your Ideas. Host Your Event.</h3>
-        <p class="text-gray-300 text-sm">Pitch, host, and participate in events that matter — online or in-person.</p>
+        <img [src]="setImage()" alt="It's an image what do you want me to say?"
+             class="w-full mx-auto transition-transform duration-500 hover:scale-105"
+             [ngClass]="setImageSize()"
+        >
+        @if (!adminPortal) {
+          <h3 class="text-xl font-semibold">Pitch Your Ideas. Host Your Event.</h3>
+          <p class="text-gray-300 text-sm">Pitch, host, and participate in events that matter — online or in-person.</p>
+        }
       </div>
     </div>
   </div>

@@ -22,6 +22,8 @@ export class ProfileComponent {
 
   constructor(private router: Router, private jwtDecoder: JwtDecoderService) {
     if (!this.jwtDecoder.extractRoles()) {
+      localStorage.removeItem("jwt")
+      localStorage.removeItem("roles")
       this.router.navigate(['/']);
       return;
     }
