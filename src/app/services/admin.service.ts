@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {UserProfile} from '../interfaces/user-profile.interface';
 import {environment} from '../environments/environment';
-import {Admin} from '../interfaces/admin.interface';
-import {AdminResponse} from '../interfaces/admin-response.interface';
 import {AuthService} from './auth.service';
 import {UserBasicInfoResponse} from '../interfaces/user-basic-info-response.interface';
+import {UserBasicInfo} from '../interfaces/user-basic-info.interface';
 
 interface queryParam {
   key: string;
@@ -28,17 +26,20 @@ export class AdminService {
     return {params: params};
   }
 
-  addUpdateAdmin(admin: Admin, add: boolean) {
+  addUpdateUser(user: UserBasicInfo, add: boolean) {
     const headers = this.authService.setHeaders();
-    if (add)
-      return this.http.post(this.URL, admin, headers);
 
-    return this.http.put(`${this.URL}/${admin.id}`, admin, headers);
+    if (add)
+      return this.http.post(this.URL, user, headers);
+
+    return this.http.put(`${this.URL}/${user.id}`, user, headers);
   }
 
-  deleteAdmin(id: string) {
+  deleteUser(entity: string, id: string) {
     const headers = this.authService.setHeaders();
-    return this.http.delete(`${this.URL}/${id}`, headers);
+    const endpoint = `${environment.apiBaseUrl}/${entity}/${id}`;
+
+    return this.http.delete(endpoint, headers);
   }
 
   getUsers(entity: string, page: number, pageSize: number = 8) {
@@ -52,8 +53,10 @@ export class AdminService {
     return this.http.get<UserBasicInfoResponse>(endpoint, {...queryParams, ...headers});
   }
 
-  getAdminById(id: string) {
+  getUserById(entity: string, id: string) {
     const headers = this.authService.setHeaders();
-    return this.http.get<Admin>(`${this.URL}/${id}`, headers);
+    const endpoint = `${environment.apiBaseUrl}/${entity}/${id}`;
+
+    return this.http.get<UserBasicInfo>(endpoint, headers);
   }
 }
