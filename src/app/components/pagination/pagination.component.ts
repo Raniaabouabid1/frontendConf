@@ -13,3 +13,4 @@ export class PaginationComponent {
   @Output() next = new EventEmitter<void>();
   @Output() prev = new EventEmitter<void>();
 }
+

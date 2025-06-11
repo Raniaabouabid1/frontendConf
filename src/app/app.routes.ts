@@ -10,6 +10,9 @@ import {RequestEventComponent} from './components/event/request-event/request-ev
 import {ForbiddenComponent} from './components/error-pages/forbidden/forbidden.component';
 import {TableComponent} from './components/table/table.component';
 import {AddEditUserComponent} from './components/add-edit-user/add-edit-user.component';
+import { PaperCreationComponent } from "./components/Paper/paper-creation/paper-creation.component";
+import { PaperDetailsComponent } from "./components/Paper/paper-details/paper-details.component";
+import { PaperListComponent } from "./components/Paper/paper-list/paper-list.component";
 
 export const routes: Routes = [
   {path: '', component: LoginComponent, pathMatch: 'full'},
@@ -37,6 +40,9 @@ export const routes: Routes = [
       {path: 'manage-users/edit/:userId', component: AddEditUserComponent},
     ]
   },
+  { path: 'event/:eventId/paper-list', component: PaperListComponent },
+  { path: 'event/:eventId/papers/:paperId', component: PaperDetailsComponent },
+  { path: 'event/papers/create', component: PaperCreationComponent },
   {path: 'events', component: EventComponent},
   {path: 'request-event', component: RequestEventComponent},
   {path: 'admin/login', component: LoginComponent},
