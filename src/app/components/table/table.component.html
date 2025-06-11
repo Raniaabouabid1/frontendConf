@@ -1,0 +1,128 @@
+<!-- component -->
+<div class="flex flex-col h-full">
+
+  <div class="w-full flex justify-between items-center px-10 pt-7 pb-3">
+    <div class="flex h-10">
+      <h3 class="text-2xl font-semibold font-mono text-slate-800">{{ entity }} list</h3>
+    </div>
+    <div class="flex ml-3">
+      <div class="w-full max-w-sm min-w-[300px] mr-5 relative">
+        <div class="relative">
+          <input
+            class="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-blue-300 rounded transition duration-200 ease focus:outline-none focus:border-blue-700 hover:border-blue-700 shadow-sm hover:shadow-md focus:shadow-md"
+            placeholder="Search for admins..."
+          />
+          <button
+            class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+            type="button"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                 stroke="currentColor" class="w-8 h-8 text-blue-600">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex w-full justify-end mb-5 h-10">
+        <button type="button"
+                class="px-3 py-1 min-w-9 min-h-9 text-md font-semibold text-blue-700 bg-white border border-blue-700 rounded hover:bg-blue-700 hover:border-blue-700 hover:text-white hover:shadow-md transition duration-200 ease"
+                (click)="navigateToForm()">
+          Add new {{ entity }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative flex flex-col w-full h-full text-gray-700 bg-white rounded-3xl bg-clip-border">
+    <table class="w-full text-left table-auto min-w-max">
+      <thead>
+      <tr>
+        <th class="p-4 px-12 border-b border-slate-200 bg-blue-100">
+          <p class="text-sm font-normal leading-none text-slate-500">
+            First name
+          </p>
+        </th>
+        <th class="p-4 px-12 border-b border-slate-200 bg-blue-100">
+          <p class="text-sm font-normal leading-none text-slate-500">
+            Last name
+          </p>
+        </th>
+        <th class="p-4 px-12 border-b border-slate-200 bg-blue-100">
+          <p class="text-sm font-normal leading-none text-slate-500">
+            Email
+          </p>
+        </th>
+        <th class="p-4 px-12 border-b border-slate-200 bg-blue-100">
+          <p class="text-sm font-normal leading-none text-slate-500">
+            Phone number
+          </p>
+        </th>
+        <th class="p-4 px-12 border-b border-slate-200 bg-blue-100">
+          <p class="text-sm font-normal leading-none text-slate-500">
+            Account status
+          </p>
+        </th>
+        <th class="p-4 px-12 border-b border-slate-200 bg-blue-100">
+          <p class="text-sm font-normal leading-none text-slate-500">
+            Actions
+          </p>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track user.id; let i = $index) {
+          <tr class="hover:bg-slate-50 border-b border-slate-200">
+            <td class="p-4 py-4 px-12">
+              <p class="block text-sm text-slate-800">{{ user.firstName }}</p>
+            </td>
+            <td class="p-4 py-4 px-12">
+              <p class="block text-sm text-slate-800">{{ user.lastName }}</p>
+            </td>
+            <td class="p-4 py-4 px-12">
+              <p class="block text-sm text-slate-800">{{ user.email }}</p>
+            </td>
+            <td class="p-4 py-4 px-12">
+              <p class="block text-sm text-slate-800">{{ user.phoneNumber }}</p>
+            </td>
+            <td class="p-4 py-4 px-12">
+              <span class="badge" [ngClass]="badgeColor(user.accountStatus)">{{ user.accountStatus }}</span>
+            </td>
+            <td class="p-4 py-4 px-12">
+              <button type="button" (click)="view(user.id)">
+                <span class="badge badge-blue">View</span>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr class="hover:bg-slate-50 border-b border-slate-200">
+            <td class="p-4 py-4 px-12">
+              <p class="block text-sm text-slate-800">No {{ entity }}s to show</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="flex relative justify-center items-center px-4 py-6">
+      @if (users.length >= 1) {
+        <div class="text-sm absolute left-12 text-slate-500">
+          Showing <b>{{ (page - 1) * pageSize + 1 }}
+          - {{ (page - 1) * pageSize + users.length }}</b> of {{ totalUsers }}
+        </div>
+      }
+      <div class="flex space-x-1">
+        @if (page !== 1 && totalPages > 1) {
+          <button (click)="prev()" class="notClicked">Prev</button>
+        }
+        <button class="clicked">
+          {{ page }}
+        </button>
+        @if (page !== totalPages && totalPages > 1) {
+          <button (click)="next()" class="notClicked">Next</button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

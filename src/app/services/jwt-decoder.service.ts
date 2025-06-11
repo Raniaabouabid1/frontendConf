@@ -7,6 +7,8 @@ import {environment} from '../environments/environment';
   providedIn: 'root'
 })
 export class JwtDecoderService {
+  validRoles : string[] = ["Admin", "Author", "Chairman", "Attendee", "BoardDirector"];
+
   constructor() { }
 
   decode() : JwtPayload | null {
@@ -43,10 +45,28 @@ export class JwtDecoderService {
       return false;
 
     if ("http://schemas.microsoft.com/ws/2008/06/identity/claims/role" in token) {
-      const roles  = token["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string[];
-      console.log(roles);
+      const roles = token["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-      localStorage.setItem('roles', roles.join(','));
+      if (!(roles instanceof Array) && typeof roles !== "string")
+        return false;
+
+      let rolesToStore;
+
+      if (roles instanceof Array) {
+        const outliers = roles.filter((role) => !this.validRoles.includes(role));
+        if (outliers.length > 0)
+          return false;
+
+        rolesToStore = roles.join(',');
+      } else {
+        const outliers = !this.validRoles.includes(roles);
+        if (outliers)
+          return false;
+
+        rolesToStore = roles;
+      }
+
+      localStorage.setItem('roles', rolesToStore);
       return true;
     }
 
