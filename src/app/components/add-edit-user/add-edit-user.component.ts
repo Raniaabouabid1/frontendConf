@@ -213,17 +213,18 @@ export class AddEditUserComponent {
   }
 
   deleteUser(remove: boolean) {
-    if (remove) {
+    this.showDeleteAccountWarningModal = false;
+    if (!remove)
+      return;
+
       this.adminService.deleteUser(this.entity, this.userId ?? "").subscribe({
         next: res => {
           this.router.navigateByUrl(`/admin/manage-${this.entity}`);
         }, error: error => {
           console.log(error);
-          this.showDeleteAccountWarningModal = false;
           console.log(error.error.message);
         }
-      })
-    }
+      });
   }
 
   modalResponse(resp: boolean) {

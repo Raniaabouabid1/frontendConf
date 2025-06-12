@@ -20,7 +20,7 @@
         }
         @if (isChairman || isAttendee) {
           <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
-            <a routerLink="events">Events</a>
+            <a routerLink="/events">Events</a>
           </div>
         }
         @if (isChairman) {
@@ -33,6 +33,11 @@
             <a routerLink="decisions">Decisions</a>
           </div>
         }
+      </div>
+      <div class="absolute right-5 flex ">
+        <button (click)="logout()">
+          <img class="w-14 h-14" src="/logout-yellow.png" alt="Logout button"/>
+        </button>
       </div>
     </div>
     <div class="flex-2/3 flex-col w-[90vw] max-w-7xl h-[80vh] max-h-lg rounded-b-3xl ">

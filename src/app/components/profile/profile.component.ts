@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {JwtDecoderService} from '../../services/jwt-decoder.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +21,7 @@ export class ProfileComponent {
   isAttendee : boolean = true;
   isBoardDirector: boolean = false;
 
-  constructor(private router: Router, private jwtDecoder: JwtDecoderService) {
+  constructor(private router: Router, private jwtDecoder: JwtDecoderService, private authService: AuthService) {
     if (!this.jwtDecoder.extractRoles()) {
       localStorage.removeItem("jwt")
       localStorage.removeItem("roles")
@@ -34,5 +35,9 @@ export class ProfileComponent {
       this.isChairman = roles.includes('Chairman');
       this.isBoardDirector = roles.includes('BoardDirector');
     }
+  }
+
+  logout() {
+    this.authService.logout(this.router);
   }
 }

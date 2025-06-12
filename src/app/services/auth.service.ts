@@ -59,4 +59,17 @@ export class AuthService {
 
     return roles.includes("Admin");
   }
+
+  logout(router: Router) {
+    const roles = localStorage.getItem('roles') ?? "";
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('roles');
+
+    if (roles.includes("Admin")) {
+      router.navigate(['/admin/login']);
+      return;
+    }
+
+    router.navigate(['/']);
+  }
 }
