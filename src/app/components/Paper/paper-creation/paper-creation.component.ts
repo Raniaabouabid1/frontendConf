@@ -22,7 +22,7 @@ export class PaperCreationComponent {
   showAddAuthor = false;
   newAuthors: Author2[] = [];
   newAuthor = { fullName: '', email: '', expertise: '' };
-  eventId: string = "f3350fae-0c83-4632-bfae-7622b0cbcdf3";
+  eventId: string = "";
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +43,7 @@ export class PaperCreationComponent {
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
+    console.log(this.eventId);
     this.loadAuthors();
   }
 
@@ -71,7 +72,7 @@ export class PaperCreationComponent {
     const names = this.newAuthor.fullName.trim().split(' ');
     const firstName = names[0];
     const lastName = names.slice(1).join(' ') || '-';
-  
+
     return {
       FirstName: firstName,
       LastName: lastName,
@@ -79,16 +80,16 @@ export class PaperCreationComponent {
       Expertise: this.newAuthor.expertise
     };
   }
-  
+
   addNewAuthor(): void {
     const authorToAdd = this.settingAuthor();
     this.authorService.createAuthors([authorToAdd]).subscribe({
       next: (createdAuthors: Author[]) => {
-        this.availableAuthors.push(...createdAuthors); 
+        this.availableAuthors.push(...createdAuthors);
         this.paperForm.patchValue({
           contributors: [...this.paperForm.get('contributors')?.value || [], createdAuthors[0].id]
         });
-  
+
         this.newAuthor = { fullName: '', email: '', expertise: '' };
         this.showAddAuthor = false;
         this.router.navigate([`/event/${this.eventId}/paper-list`]);
@@ -99,31 +100,29 @@ export class PaperCreationComponent {
     });
   }
 
-  
-  
+
+
 
   onSubmit(): void {
     if (this.paperForm.invalid) return;
-  
+
     const formData = new FormData();
     formData.append('Title', this.paperForm.get('title')?.value);
     formData.append('Abstract', this.paperForm.get('abstract')?.value);
     formData.append('PublicationDate', this.paperForm.get('publicationDate')?.value);
     formData.append('PaperFile', this.paperForm.get('paperFile')?.value);
     formData.append('Keywords', this.paperForm.get('keywords')?.value);
-  
+
     const contributorIds = this.paperForm.get('contributors')?.value || [];
     contributorIds.forEach((authorId: string, index: number) => {
       formData.append(`Contributors[${index}].AuthorId`, authorId);
     });
-  
-    this.eventId = "f3350fae-0c83-4632-bfae-7622b0cbcdf3";
-    
+
     this.paperService.createPaper(this.eventId, formData).subscribe({
       next: () => this.router.navigate([`/event/${this.eventId}/paper-list`]),
       error: (err : any) => console.error('Error creating paper:', err)
     });
   }
-  
+
 
 }

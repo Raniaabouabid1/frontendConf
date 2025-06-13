@@ -26,6 +26,9 @@ export class PaperDetailsComponent implements OnInit {
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('eventId')!;
     const paperId = this.route.snapshot.paramMap.get('paperId')!;
+
+    console.log(paperId);
+    console.log(eventId);
     this.paperService.getPaperById(eventId, paperId).subscribe({
       next: (data: Paper) => {
         this.paper = data;
@@ -44,8 +47,8 @@ export class PaperDetailsComponent implements OnInit {
   downloadImage() {
     const link = document.createElement('a');
     link.href = this.imageUrl;
-    link.download = this.paper.title + (this.imageUrl.endsWith('.jpg') ? '.jpg' : '.jpg'); 
-    document.body.appendChild(link); 
+    link.download = this.paper.title + (this.imageUrl.endsWith('.jpg') ? '.jpg' : '.jpg');
+    document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }

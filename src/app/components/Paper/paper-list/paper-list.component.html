@@ -3,13 +3,13 @@
       <!-- Navbar -->
       <div class="p-1 shadow-lg w-[90vw] max-w-7xl h-[9vh] rounded-t-3xl flex flex-row justify-between">
         <div class="w-1/4 flex">
-          <a routerLink="/signup">
+          <a routerLink="/home">
             <img class="h-full rounded-full ml-10 border-2" src="logo.png" alt="UPFCON Logo" />
           </a>
         </div>
         <div class="w-3/4 h-full flex items-center divide-x divide-gray-200">
           <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
-            <a routerLink="edit">Manage my profile</a>
+            <a routerLink="/profile/edit">Manage my profile</a>
           </div>
           <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
             <a routerLink="diplomas">My diplomas</a>
@@ -18,25 +18,26 @@
             <a routerLink="submissions">My submissions</a>
           </div>
           <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
-            <a routerLink="events">My events</a>
+            <a routerLink="/events">My events</a>
           </div>
           <div class="flex-1 justify-center h-full flex items-center px-5 hover:bg-gray-100">
             <a routerLink="evaluations">Evaluate papers</a>
           </div>
         </div>
       </div>
-  
+
       <!-- Paper List Section -->
       <div class="bg-white p-6 sm:p-8 overflow-y-auto h-[80vh]">
         <div class="relative mb-10">
           <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800">Submitted Papers</h2>
+          <a [routerLink]="'/events/' + eventId + '/create-papers'" class="absolute top-1 right-16 rounded-3xl bg-yellow-300 px-4 py-2">Submit my paper</a>
         </div>
-  
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           <ng-container *ngFor="let paper of pagedPapers[currentPage]">
 
-            <a [routerLink]="['/event', paper.eventId, 'papers', paper.id]" class="block group">
-              
+            <a [routerLink]="['/events', paper.eventId, 'papers', paper.id]" class="block group">
+
             <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden flex flex-col">
               <div class="w-full h-48 bg-gray-200 overflow-hidden flex items-center justify-center">
                 <img
@@ -63,7 +64,7 @@
           </a>
           </ng-container>
         </div>
-  
+
         <app-pagination
           [currentPage]="currentPage"
           [totalPages]="pagedPapers.length"
@@ -73,4 +74,3 @@
       </div>
     </div>
   </div>
-  

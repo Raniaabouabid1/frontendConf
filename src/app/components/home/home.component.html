@@ -1,0 +1,136 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-yellow-100 via-white to-yellow-200">
+  <div class="bg-white rounded-3xl shadow-2xl w-[90vw] max-w-7xl h-[calc(100vh-2rem)] overflow-hidden flex flex-col">
+    <div class="relative shadow-lg h-[9vh] flex items-center justify-center rounded-t-3xl flex-shrink-0">
+    <div class="absolute left-5 flex ">
+        <a routerLink="/home"><img class="w-14 h-14 rounded-full border-2" src="logo.png" alt="UPFCON Logo"/></a>
+      </div>
+      <div class="h-full flex items-center divide-x divide-gray-200">
+        <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
+          <a routerLink="/profile/edit">Profile</a>
+        </div>
+        @if (isChairman || isAuthor) {
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
+            <a routerLink="diplomas">Diplomas</a>
+          </div>
+        }
+        @if (isAuthor) {
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
+            <a routerLink="submissions">Submissions</a>
+          </div>
+        }
+        @if (isChairman || isAttendee) {
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
+            <a routerLink="/events">Events</a>
+          </div>
+        }
+        @if (isChairman) {
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
+            <a routerLink="evaluations">Evaluations</a>
+          </div>
+        }
+        @if (isBoardDirector) {
+          <div class="flex-1 justify-center h-full flex items-center px-5 py-0 hover:bg-gray-100">
+            <a routerLink="decisions">Decisions</a>
+          </div>
+        }
+        @if (localStorage.getItem("jwt") !== null) {
+        <div class="absolute right-5 flex ">
+          <button (click)="logout()">
+            <img class="w-14 h-14" src="/logout-yellow.png" alt="Logout button"/>
+          </button>
+        </div>
+        } @else {
+          <div class="absolute right-5 flex ">
+            <a routerLink="/login">
+              <img class="w-12 h-12" src="/login.png" alt="Logout button"/>
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="flex-1 overflow-y-auto">
+      <section class="relative bg-[url('/assets/banner.jpg')] bg-cover bg-center h-[55vh] flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="relative z-10 text-center text-white space-y-6 px-6">
+          <h1 class="text-4xl sm:text-5xl font-extrabold drop-shadow-xl">
+            UPFCON 2025 — Reimagining Innovation
+          </h1>
+          <p class="max-w-3xl mx-auto text-lg sm:text-xl">Pitch your innovative ideas and discoveries · UPF Fès</p>
+          <a routerLink="/request-event"
+             class="inline-block bg-white text-black font-semibold py-3 px-6 rounded-full hover:bg-gray-200 transition shadow-lg">
+            <div class="flex items-center gap-2">
+              <img src="/idea.png" class="h-6 w-6" alt="idea icon"> Pitch ypur event idea
+            </div>
+          </a>
+        </div>
+      </section>
+      <section class="bg-white py-12 select-none"
+               (mouseenter)="pause()" (mouseleave)="resume()">
+        <h2 class="text-3xl font-bold text-center mb-6"> Top Highlights of 2025</h2>
+        <div class="relative overflow-hidden">
+          <div class="flex transition-transform duration-700 ease-out"
+               [style.transform]="'translateX(-'+currentSlide*100+'%)'">
+            <ng-container *ngFor="let s of slides">
+              <div class="min-w-full flex-shrink-0 px-4">
+                <div class="relative h-[40vh] w-full rounded-2xl overflow-hidden shadow-lg">
+                  <img [src]="s.icon"
+                       class="absolute inset-0 w-full h-full object-cover"
+                       alt="slide background">
+                  <div class="absolute inset-0 bg-black/40 flex flex-col
+                        items-center justify-center text-center text-white px-6">
+                    <h3 class="text-2xl sm:text-3xl font-semibold mb-2 drop-shadow">
+                      {{ s.title }}
+                    </h3>
+                    <p class="text-sm sm:text-base max-w-md">
+                      {{ s.desc }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            <button *ngFor="let _ of slides; index as i"
+                    (click)="go(i)"
+                    class="h-2 w-2 rounded-full"
+                    [class.bg-indigo-600]="currentSlide===i"
+                    [class.bg-gray-300]="currentSlide!==i">
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="bg-yellow-50 py-16 px-6 lg:px-24 text-gray-800">
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h2 class="text-3xl font-bold mb-4">About the Conference</h2>
+            <p class="mb-4 leading-relaxed">
+              UPFCON brings together researchers, professionals, and enthusiasts to share
+              the latest technological breakthroughs, foster interdisciplinary collaboration,
+              and spark innovative ideas in the heart of Morocco.
+            </p>
+            <p class="mb-6">
+              Over four days, enjoy inspiring keynotes, hands-on workshops, and a vibrant
+              startup exhibition area.
+            </p>
+            <a routerLink="/events"
+               class="inline-block bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition">
+              Discover the validated events →
+            </a>
+          </div>
+          <img src="/assets/about.jpg" class="rounded-3xl shadow-lg w-full" alt="">
+        </div>
+      </section>
+      <section class="py-16 bg-white">
+        <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div *ngFor="let stat of stats" class="space-y-2">
+            <p class="text-4xl font-extrabold text-indigo-600">{{ stat.value }}</p>
+            <span class="text-gray-600">{{ stat.label }}</span>
+          </div>
+        </div>
+      </section>
+      <footer class="bg-black text-white py-6 text-center">
+        © 2025 UPFCON · Made with Love in Fès
+      </footer>
+    </div>
+  </div>
+</div>

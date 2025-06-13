@@ -13,9 +13,11 @@ import {AddEditUserComponent} from './components/add-edit-user/add-edit-user.com
 import { PaperCreationComponent } from "./components/Paper/paper-creation/paper-creation.component";
 import { PaperDetailsComponent } from "./components/Paper/paper-details/paper-details.component";
 import { PaperListComponent } from "./components/Paper/paper-list/paper-list.component";
+import {HomeComponent} from './components/home/home.component';
 
 export const routes: Routes = [
-  {path: '', component: LoginComponent, pathMatch: 'full'},
+  {path: '', component: HomeComponent, pathMatch: 'full'},
+  {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
   {path: '403', component: ForbiddenComponent},
@@ -40,9 +42,9 @@ export const routes: Routes = [
       {path: 'manage-users/edit/:userId', component: AddEditUserComponent},
     ]
   },
-  { path: 'event/:eventId/paper-list', component: PaperListComponent },
-  { path: 'event/:eventId/papers/:paperId', component: PaperDetailsComponent },
-  { path: 'event/papers/create', component: PaperCreationComponent },
+  { path: 'events/:eventId/paper-list', component: PaperListComponent },
+  { path: 'events/:eventId/create-papers', component: PaperCreationComponent },
+  { path: 'events/:eventId/papers/:paperId', component: PaperDetailsComponent },
   {path: 'events', component: EventComponent},
   {path: 'request-event', component: RequestEventComponent},
   {path: 'admin/login', component: LoginComponent},
